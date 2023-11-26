@@ -27,6 +27,7 @@ pipeline {
                     MAVEN_BIN = "${MAVEN_HOME}/bin"
                     env.PATH = "${MAVEN_BIN}:${env.PATH}"
                     sh 'java -version'
+                    sh 'mvn -version'
                     sh './mvnw clean package'
                     sh './mvnw test'
                 }
