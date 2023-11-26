@@ -48,7 +48,8 @@
                  <plugin>                 
                           <groupId>org.springframework.boot</groupId>                
                           <artifactId>spring-boot-maven-plugin</artifactId> 
-                          <configuration>                     
+                          <configuration>   
+                                   <release>17</release>
                                    <image>                         
                                             <builder>paketobuildpacks/builder-jammy-base:latest</builder>                     
                                    </image>                     
