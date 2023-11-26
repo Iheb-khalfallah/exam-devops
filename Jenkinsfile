@@ -1,5 +1,10 @@
 pipeline {
     agent any
+
+    environment {
+        // Set Maven home
+        MAVEN_HOME = '/home/iheb_kh/apache-maven-3.9.5'
+    }
     
     tools {
         // Specify the JDK installation defined in Jenkins configuration
@@ -19,6 +24,8 @@ pipeline {
         stage('Build and Test') {
             steps {
                 script {
+                    MAVEN_BIN = "${MAVEN_HOME}/bin"
+                    env.PATH = "${MAVEN_BIN}:${env.PATH}"
                     sh 'java -version'
                     sh './mvnw clean package'
                     sh './mvnw test'
