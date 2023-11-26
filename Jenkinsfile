@@ -7,6 +7,7 @@ pipeline {
     }
     
     tools {
+        maven 'Maven_3.11.0'
         // Specify the JDK installation defined in Jenkins configuration
         jdk 'Java 17'
     }
