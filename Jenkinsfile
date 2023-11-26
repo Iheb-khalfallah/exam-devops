@@ -3,7 +3,7 @@ pipeline {
     
     tools {
         // Specify the JDK installation defined in Jenkins configuration
-        jdk 'Java 11'
+        jdk 'Java 17'
     }
     
     stages {
