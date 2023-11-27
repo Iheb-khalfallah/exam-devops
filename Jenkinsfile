@@ -1,12 +1,19 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'jenkins/jenkins:lts'
+            args '--group-add docker'
+        }
+    }
     environment {
         // Define default values for environment variables
         JAVA_HOME = '/var/lib/jenkins/jdk-17'
         PATH = "$JAVA_HOME/bin:$PATH"
+        dockerImage = "ihebkhalfallah/springapp:${env.BUILD_NUMBER}"
     }
     tools{
         maven 'maven'
+        docker 'docker'
     }
     stages {
          stage('Download and Install OpenJDK') {
@@ -33,6 +40,34 @@ pipeline {
             steps {
                 script {
                    	sh './mvnw test'
+                }
+            }
+        }
+        stage('Docker Build and Push') {
+            steps {
+                script {
+                    // Authenticate with Docker Hub using Jenkins credentials
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+                        // Build the Docker image
+                        def customImage = docker.build(dockerImage)
+
+                        // Push the Docker image to Docker Hub
+                        customImage.push()
+                    }
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                script {
+                    // Authenticate with Docker Hub to pull the image
+                    docker.withRegistry('https://registry.hub.docker.com', 'Docker-Credential') {
+                        // Pull the Docker image
+                        docker.image(dockerImage).pull()
+
+                        // Now you can use the Docker image as needed in your deployment steps
+                        // Example: docker.image(dockerImage).run('-p 8080:8080 -d')
+                    }
                 }
             }
         }
