@@ -13,7 +13,6 @@ pipeline {
     }
     tools{
         maven 'maven'
-        docker 'docker'
     }
     stages {
          stage('Download and Install OpenJDK') {
