@@ -25,7 +25,7 @@ pipeline {
                     env.JAVA_HOME = '/var/lib/jenkins/jdk-17'
                     env.PATH = "$JAVA_HOME/bin:$PATH"
                 }
-                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://chaima2143: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@github.com/chaima2143/springb-demo.git']])
+                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Iheb-khalfallah/exam-devops.git']])
                 sh 'mvn clean install -U'
             }
         }
