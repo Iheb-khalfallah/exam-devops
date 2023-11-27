@@ -4,6 +4,7 @@ pipeline {
     environment {
         // Set Maven home
         MAVEN_HOME = '/home/iheb_kh/apache-maven-3.9.5'
+        JAVA_HOME = '/usr/lib64/jvm/jre-11-openjdk/bin/java'
     }
     
     tools {
@@ -27,8 +28,6 @@ pipeline {
         stage('Build and Test') {
             steps {
                 script {
-                    MAVEN_BIN = "${MAVEN_HOME}/bin"
-                    env.PATH = "${MAVEN_BIN}:${env.PATH}"
                     sh 'java -version'
                     sh 'mvn -version'
                     sh './mvnw clean package'
