@@ -11,7 +11,7 @@ pipeline {
         maven 'M3' 
 
         // Specify the JDK installation defined in Jenkins configuration
-        jdk 'Java 17'
+        jdk 'Java 11'
     }
     
     stages {
