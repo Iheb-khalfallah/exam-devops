@@ -61,15 +61,6 @@
                                    </excludes>               
                           </configuration>           
                  </plugin>
-                 <plugin>
-                     <groupId>org.apache.maven.plugins</groupId>
-                     <artifactId>maven-compiler-plugin</artifactId>
-                     <version>3.11.8</version> <!-- Use the latest version that supports Java 17 -->
-                     <configuration>
-                         <source>17</source>
-                         <target>17</target>
-                     </configuration>
-                 </plugin>
             
         </plugins>
     </build>
