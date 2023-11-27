@@ -29,5 +29,21 @@ pipeline {
                 sh 'mvn clean install -U'
             }
         }
+        stage('test') {
+            steps {
+                script {
+                   	sh './mvnw test'
+                }
+            }
+        }
      }
+    post {
+        success {
+            echo 'Build and tests passed.'
+        }
+
+        failure {
+            echo 'Build or tests failed.'
+        }
+    }
 }
