@@ -1,57 +1,33 @@
 pipeline {
     agent any
-
     environment {
-        // Set Maven home
-        MAVEN_HOME = '/home/iheb_kh/apache-maven-3.9.5'
-        JAVA_HOME = '/usr/lib64/jvm/jre-11-openjdk/bin/java'
+        // Define default values for environment variables
+        JAVA_HOME = '/var/lib/jenkins/jdk-17'
+        PATH = "$JAVA_HOME/bin:$PATH"
     }
-    
-    tools {
-        // or use the exact name configured in Jenkins for Maven
-        maven 'M3' 
-
-        // Specify the JDK installation defined in Jenkins configuration
-        jdk 'Java 11'
+    tools{
+        maven 'maven'
     }
-    
     stages {
-        stage('Checkout') {
+         stage('Download and Install OpenJDK') {
             steps {
                 script {
-                    deleteDir()
-                    checkout scm
+                    // Download and install OpenJDK 17
+                    sh 'wget https://download.java.net/java/GA/jdk17/0d483333a00540d886896bac774ff48b/35/GPL/openjdk-17_linux-x64_bin.tar.gz'
+                    sh 'tar -xvf openjdk-17_linux-x64_bin.tar.gz -C /var/lib/jenkins/'
+                    sh 'chmod -R 755 /var/lib/jenkins/jdk-17'
                 }
             }
         }
-
-        stage('Build and Test') {
+        stage('Build Maven') {
             steps {
                 script {
-                    sh 'java -version'
-                    sh 'mvn -version'
-                    sh './mvnw clean package'
-                    sh './mvnw test'
+                    env.JAVA_HOME = '/var/lib/jenkins/jdk-17'
+                    env.PATH = "$JAVA_HOME/bin:$PATH"
                 }
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://chaima2143: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@github.com/chaima2143/springb-demo.git']])
+                sh 'mvn clean install -U'
             }
         }
-        stage('Deploy') {
-            steps {
-                script {
-                    echo 'Deploying...'
-                }
-            }
-        }
-    }
-
-    post {
-        success {
-            echo 'Build and tests passed.'
-        }
-
-        failure {
-            echo 'Build or tests failed.'
-        }
-    }
+     }
 }
-
