@@ -1,14 +1,16 @@
 pipeline {
     agent any
+
     environment {
         JAVA_HOME = '/var/lib/jenkins/jdk-17'
         PATH = "$JAVA_HOME/bin:$PATH"
     }
+
     tools {
         maven 'maven'
-        // Install Docker using the Docker Pipeline plugin
         dockerTool 'docker'
     }
+
     stages {
         stage('Download and Install OpenJDK') {
             steps {
@@ -19,6 +21,7 @@ pipeline {
                 }
             }
         }
+
         stage('Build Maven') {
             steps {
                 script {
@@ -29,13 +32,24 @@ pipeline {
                 sh 'mvn clean install -U'
             }
         }
+
         stage('Build Docker Image') {
             steps {
                 script {
-                    def customImage = docker.build("docekr-repo-iheb/image-iheb:${env.BUILD_NUMBER}")
+                    // Build the Docker image
+                    docker.build("ihebkhalfallah/mongo-demo:${env.BUILD_NUMBER}")
+
+                    // Optionally, tag the image with "latest"
+                    docker.image("ihebkhalfallah/mongo-demo:${env.BUILD_NUMBER}").push()
+
+                    // Push the image to Docker Hub
+                    docker.withRegistry('https://registry.hub.docker.com', 'IHEBKHALFALLAH') {
+                        docker.image("ihebkhalfallah/mongo-demo:${env.BUILD_NUMBER}").push()
+                    }
                 }
             }
         }
+
         stage('Test') {
             steps {
                 script {
@@ -44,6 +58,7 @@ pipeline {
             }
         }
     }
+
     post {
         success {
             echo 'Build, tests, and Docker image creation passed.'
