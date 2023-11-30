@@ -33,13 +33,13 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build and Push Docker Image') {
             steps {
                 script {
                     // Build the Docker image
                     docker.build("ihebkhalfallah/mongo-demo:${env.BUILD_NUMBER}")
 
-                    // Optionally, tag the image with "latest"
+                    // Tag the image
                     docker.image("ihebkhalfallah/mongo-demo:${env.BUILD_NUMBER}").push()
 
                     // Push the image to Docker Hub
