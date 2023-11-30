@@ -28,7 +28,7 @@ pipeline {
             steps {
                 script {
                     // Docker login
-                    withCredentials([string(credentialsId: 'IHEBKHALFALLAH', variable: 'IHEBHesoyam123')]) {
+                    withCredentials([string(credentialsId: 'IHEBKHALFALLAH', variable: 'DOCKER_HUB_PASSWORD')]) {
                         sh "echo \$DOCKER_HUB_PASSWORD | docker login -u ihebkhalfallah --password-stdin"
                     }
 
