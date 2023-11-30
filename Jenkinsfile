@@ -27,7 +27,7 @@ pipeline {
         stage('Build Docker Image') {
         steps {
             script {
-                sh 'docker login -u iheb khalfallah -p IHEBHesoyam123'
+                sh 'docker login -u iheb khalfallah -p IHEBhesoyam123'
                 docker.build("ihebkhalfallah/mongo-demo:${env.BUILD_NUMBER}")
                 docker.image("ihebkhalfallah/mongo-demo:${env.BUILD_NUMBER}").push()
                 docker.withRegistry('https://registry.hub.docker.com', 'IHEBKHALFALLAH') {
