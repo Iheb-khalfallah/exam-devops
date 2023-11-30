@@ -5,10 +5,10 @@ FROM openjdk:17
 WORKDIR /app
 
 # Copy the JAR file into the container
-COPY target/your-spring-boot-app.jar .
+COPY target/mongo-demo.jar .
 
 # Expose the port your application runs on
-EXPOSE 8080
+EXPOSE 8090
 
 # Define the command to run your application
-CMD ["java", "-jar", "your-spring-boot-app.jar"]
+CMD ["java", "-jar", "mongo-demo.jar"]
