@@ -28,12 +28,12 @@ pipeline {
             steps {
                 script {
                     // Docker login
-                    withCredentials([string(credentialsId: 'IHEBKHALFALLAH', variable: 'DOCKER_HUB_PASSWORD')]) {
-                        sh "echo \$DOCKER_HUB_PASSWORD | docker login -u ihebkhalfallah --password-stdin"
+                    withCredentials([usernamePassword(credentialsId: 'IHEBKHALFALLAH', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
+                        sh "docker login -u \$DOCKER_HUB_USERNAME -p \$DOCKER_HUB_PASSWORD"
                     }
 
                     // Push the Docker image
-                    docker.withRegistry('https://registry.hub.docker.com', 'IHEBKHALFALLAH') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'your-docker-hub-credentials-id') {
                         docker.image("ihebkhalfallah/mongo-demo:9").push()
                     }
                 }
