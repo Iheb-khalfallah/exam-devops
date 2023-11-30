@@ -28,10 +28,10 @@ pipeline {
         steps {
             script {
                 // Build and push Docker image
-                docker.build("ihebkhalfallah / mongo-demo:${env.BUILD_NUMBER}")
-                docker.image("ihebkhalfallah / mongo-demo:${env.BUILD_NUMBER}").push()
+                docker.build("ihebkhalfallah/mongo-demo:${env.BUILD_NUMBER}")
+                docker.image("ihebkhalfallah/mongo-demo:${env.BUILD_NUMBER}").push()
                 docker.withRegistry('https://registry.hub.docker.com', 'IHEBKHALFALLAH') {
-                    docker.image("ihebkhalfallah / mongo-demo:${env.BUILD_NUMBER}").push()
+                    docker.image("ihebkhalfallah/mongo-demo:${env.BUILD_NUMBER}").push()
                 }
             }
         }
