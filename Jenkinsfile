@@ -33,22 +33,18 @@ pipeline {
             }
         }
 
-        stage('Build and Push Docker Image') {
-            steps {
-                script {
-                    // Build the Docker image
-                    docker.build("ihebkhalfallah/mongo-demo:${env.BUILD_NUMBER}")
-
-                    // Tag the image
+        stage('Build Docker Image') {
+        steps {
+            script {
+                // Build and push Docker image
+                docker.build("ihebkhalfallah/mongo-demo:${env.BUILD_NUMBER}")
+                docker.image("ihebkhalfallah/mongo-demo:${env.BUILD_NUMBER}").push()
+                docker.withRegistry('https://registry.hub.docker.com', 'IHEBKHALFALLAH') {
                     docker.image("ihebkhalfallah/mongo-demo:${env.BUILD_NUMBER}").push()
-
-                    // Push the image to Docker Hub
-                    docker.withRegistry('https://registry.hub.docker.com', 'IHEBKHALFALLAH') {
-                        docker.image("ihebkhalfallah/mongo-demo:${env.BUILD_NUMBER}").push()
-                    }
                 }
             }
         }
+    }
 
         stage('Test') {
             steps {
