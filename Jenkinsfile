@@ -29,13 +29,14 @@ pipeline {
                 script {
                     // Docker login
                     withCredentials([usernamePassword(credentialsId: 'TunisianDeveloper', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
-                        sh "docker login -u \$DOCKER_HUB_USERNAME -p \$DOCKER_HUB_PASSWORD"
+                        sh "docker login -u \$DOCKER_HUB_USERNAME -p \$DOCKER_HUB_PASSWORD docker.io/ihebkhalfallah"
                     }
 
                     // Push the Docker image
-                    docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
-                        docker.image("ihebkhalfallah/mongo-demo:9").push()
-                    }
+                    //docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
+                        //docker.image("ihebkhalfallah/mongo-demo:9").push()
+                    //}
+                    docker.image("docker.io/ihebkhalfallah/mongo-demo:9").pull()
                 }
             }
         }
