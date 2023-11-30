@@ -7,7 +7,7 @@ pipeline {
     tools {
         maven 'maven'
         // Install Docker using the Docker Pipeline plugin
-        docker 'docker'
+        dockerTool 'docker'
     }
     stages {
         stage('Download and Install OpenJDK') {
