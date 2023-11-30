@@ -5,10 +5,10 @@ FROM openjdk:17
 WORKDIR /app
 
 # Copy the JAR file into the container
-COPY target/mongo-demo.jar .
+COPY target/mongo-demo-0.0.1-SNAPSHOT.jar .
 
 # Expose the port your application runs on
 EXPOSE 8090
 
 # Define the command to run your application
-CMD ["java", "-jar", "mongo-demo.jar"]
+CMD ["java", "-jar", "mongo-demo-0.0.1-SNAPSHOT.jar"]
