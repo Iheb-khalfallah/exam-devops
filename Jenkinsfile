@@ -32,8 +32,8 @@ pipeline {
                          sh "docker login -u \$DOCKER_HUB_USERNAME -p \$DOCKER_HUB_PASSWORD docker.io"
                     }
 
-                    // Build or pull the Docker image
-                    sh "docker pull ihebkhalfallah/mongo-demo:1 || docker build -t ihebkhalfallah/mongo-demo:1 ./Dockerfile"
+                    // Build the Docker image
+                    docker.build -t ihebkhalfallah/mongo-demo:1
 
                     // Push the Docker image
                     docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
