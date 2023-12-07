@@ -33,7 +33,7 @@ pipeline {
                     }
 
                     // Build or pull the Docker image
-                    sh "docker pull ihebkhalfallah/mongo-demo:1 || docker build -t ihebkhalfallah/mongo-demo:1 ../Dockerfile"
+                    sh "docker pull ihebkhalfallah/mongo-demo:1 || docker build -t ihebkhalfallah/mongo-demo:1 ./Dockerfile"
 
                     // Push the Docker image
                     docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
