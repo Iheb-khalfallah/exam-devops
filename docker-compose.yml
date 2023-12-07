@@ -1,12 +1,27 @@
-version: '3'
+version: "3.8"
 services:
-  mongodb:
-    image: mongo:latest
-    port:
-      - "27017:27017"
-  eloquent_murdock:
+  sb-app:
     image: ihebkhalfallah/mongo-demo:1
+    build: .
+    container_name: "eloquent_murdock"
     ports:
-      - "9090:9090"
+      - 9090:9090
+    networks:
+      - mynetworkforspringapp
     depends_on:
       - mongodb
+
+  mongodb:
+    image: mongo:latest
+    container_name: "mongodb"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+    ports:
+      - "27017:27017"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
