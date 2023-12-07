@@ -1,12 +1,28 @@
-version: '3'
+version: "3.8"
+
 services:
+  mongo-demo:
+    image: ihebkhalfallah/mongo-demo:1
+    build: .
+    container_name: "eloquent_murdock"
+    ports:
+      - 9090:9090
+    networks:
+      - mynetwork
+    depends_on:
+      - mongodb
+
   mongodb:
     image: mongo:latest
+    container_name: "mongodb"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
     ports:
       - "27017:27017"
-    your-app:
-      image: ihebkhalfallah/mongo-demo:1
-      ports:
-        - "9090:9090"
-      depends_on:
-        - mongodb
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
