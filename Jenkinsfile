@@ -69,7 +69,12 @@ pipeline {
                     checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Iheb-khalfallah/exam-devops.git']])
                     //sh 'docker pull mongo:latest'
                     // Run Docker Compose
-                    dockerCompose(buildFile: 'docker-compose.yml', up: ' -d')
+                    dockerCompose(
+                        dockerComposeFile: 'docker-compose.yml',
+                        build: true,
+                        pull: true,
+                        up: ' -d'
+                    )
                 }
             }
         }
