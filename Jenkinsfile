@@ -62,6 +62,17 @@ pipeline {
                 }
             }
         }
+        stage('Docker Compose') {
+            steps {
+                script {
+                    // Clone the GitHub repository
+                    checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Iheb-khalfallah/exam-devops.git']])
+
+                    // Run Docker Compose
+                    dockerCompose(buildFile: 'docker-compose.yml', up: ' -d')
+                }
+            }
+        }
         stage('Test') {
             steps {
                 script {
