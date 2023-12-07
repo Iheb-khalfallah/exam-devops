@@ -29,18 +29,19 @@ pipeline {
                 script {
                     // Docker login
                     withCredentials([usernamePassword(credentialsId: 'TunisianDeveloper', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
-                        sh "docker login -u \$DOCKER_HUB_USERNAME -p \$DOCKER_HUB_PASSWORD docker.io/ihebkhalfallah"
+                         sh "docker login -u \$DOCKER_HUB_USERNAME -p \$DOCKER_HUB_PASSWORD docker.io"
                     }
+
+                    // Build or pull the Docker image
+                    sh "docker pull ihebkhalfallah/mongo-demo:1 || docker build -t ihebkhalfallah/mongo-demo:1 ../Dockerfile"
 
                     // Push the Docker image
                     docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
-                        docker.image("ihebkhalfallah/mongo-demo:tagname").push()
+                        docker.image("ihebkhalfallah/mongo-demo:1").push()
                     }
-                    //docker.image("docker.io/ihebkhalfallah/mongo-demo:9").pull()
                 }
             }
         }
-        
         stage('Test') {
             steps {
                 script {
