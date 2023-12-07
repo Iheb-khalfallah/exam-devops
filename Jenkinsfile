@@ -42,26 +42,26 @@ pipeline {
                 }
             }
         }
-      //  stage('Push'){
-           // steps{
-               // script{
-                
-                    // Push the Docker image
-                   // docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
-                        //docker.image("ihebkhalfallah/mongo-demo:1").push()
-                    //}
-                //}
-          //  }
-       // }
-        stage('Pull'){
+        stage('Push'){
             steps{
                 script{
                 
-                    // Pull the Docker image
-                    docker.image("ihebkhalfallah/mongo-demo:1").push()
+                     Push the Docker image
+                    docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
+                        //docker.image("ihebkhalfallah/mongo-demo:1").push()
+                    }
                 }
             }
         }
+        //stage('Pull'){
+            //steps{
+                //script{
+                
+                    // Pull the Docker image
+                    //docker.image("ihebkhalfallah/mongo-demo:1").push()
+                //}
+            //}
+        //}
         stage('Docker Compose') {
             steps {
                 script {
