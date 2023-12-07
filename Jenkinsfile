@@ -24,17 +24,28 @@ pipeline {
             }
         }
         
-        stage('Build and Push Docker Image') {
+        stage('Docker Login') {
             steps {
                 script {
                     // Docker login
                     withCredentials([usernamePassword(credentialsId: 'TunisianDeveloper', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
                          sh "docker login -u \$DOCKER_HUB_USERNAME -p \$DOCKER_HUB_PASSWORD docker.io"
                     }
-
+                }
+            }
+        }
+        stage('Build Image'){
+            steps{
+                script{
                     // Build the Docker image
-                    docker.build -t ihebkhalfallah/mongo-demo:1
-
+                    docker.build("ihebkhalfallah/mongo-demo:1")
+                }
+            }
+        }
+        stage('Push'){
+            steps{
+                script{
+                
                     // Push the Docker image
                     docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
                         docker.image("ihebkhalfallah/mongo-demo:1").push()
