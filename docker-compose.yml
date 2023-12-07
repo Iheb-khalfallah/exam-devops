@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  sb-app:
+  springboot-app:
     image: ihebkhalfallah/mongo-demo:1
     build: .
     container_name: "eloquent_murdock"
