@@ -7,6 +7,6 @@ services:
   eloquent_murdock:
     image: ihebkhalfallah/mongo-demo:1
     ports:
-      - "8080:8080"
+      - "9090:9090"
     depends_on:
       - mongodb
