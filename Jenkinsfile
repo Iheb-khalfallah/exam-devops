@@ -46,9 +46,9 @@ pipeline {
             steps{
                 script{
                 
-                     Push the Docker image
+                     //Push the Docker image
                     docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
-                        //docker.image("ihebkhalfallah/mongo-demo:1").push()
+                        docker.image("ihebkhalfallah/mongo-demo:1").push()
                     }
                 }
             }
