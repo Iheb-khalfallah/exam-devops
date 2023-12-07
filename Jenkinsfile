@@ -33,10 +33,10 @@ pipeline {
                     }
 
                     // Push the Docker image
-                    //docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
-                        //docker.image("ihebkhalfallah/mongo-demo:9").push()
-                    //}
-                    docker.image("docker.io/ihebkhalfallah/mongo-demo:9").pull()
+                    docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
+                        docker.image("ihebkhalfallah/mongo-demo:1").push()
+                    }
+                    //docker.image("docker.io/ihebkhalfallah/mongo-demo:9").pull()
                 }
             }
         }
