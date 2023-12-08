@@ -1,29 +1,23 @@
-version: "3.8"
-
+version: '3'
 services:
-  mongo-demo:
-    image: ihebkhalfallah/mongo-demo:1
-    build: .
-    container_name: "eloquent_murdock"
-    ports:
-      - 9090:9090
-    networks:
-      - mynetwork
-    depends_on:
-      - mongodb
-
+  # MongoDB service
   mongodb:
-    image: mongo:latest
-    container_name: "mongodb"
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=admin
+    build:
+      context: .
+      dockerfile: Dockerfile-mongodb
     ports:
       - "27017:27017"
-    networks:
-      - mynetwork
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_DATABASE: mongodb
 
-networks:
-  mynetwork:
-    driver: bridge
-
+  # Spring Boot application service
+  spring-app:
+    build:
+      context: .
+      dockerfile: Dockerfile-spring
+    ports:
+      - "9090:9090"
+    depends_on:
+      - mongodb
