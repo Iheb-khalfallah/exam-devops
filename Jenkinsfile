@@ -12,94 +12,112 @@ pipeline {
     }
 
     stages {
-
         stage('Build Maven') {
             steps {
                 script {
-                    env.JAVA_HOME = '/var/lib/jenkins/jdk-17'
-                    env.PATH = "$JAVA_HOME/bin:$PATH"
+                    withEnv(["JAVA_HOME=${env.JAVA_HOME}", "PATH=${env.PATH}"]) {
+                        checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Iheb-khalfallah/exam-devops.git']])
+                        sh 'mvn clean install -U'
+                    }
                 }
-                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Iheb-khalfallah/exam-devops.git']])
-                sh 'mvn clean install -U'
             }
         }
+
         stage('Prune Docker Data') {
             steps {
                 script {
-                    sh 'docker system prune -a --volumes -f'
+                    container('docker') {
+                        sh 'docker system prune -a --volumes -f'
+                    }
                 }
             }
         }
+
         stage('Docker Login') {
             steps {
                 script {
-                    // Docker login
-                    withCredentials([usernamePassword(credentialsId: 'TunisianDeveloper', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
-                         sh "docker login -u \$DOCKER_HUB_USERNAME -p \$DOCKER_HUB_PASSWORD docker.io"
+                    container('docker') {
+                        withCredentials([usernamePassword(credentialsId: 'TunisianDeveloper', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
+                            sh "docker login -u \$DOCKER_HUB_USERNAME -p \$DOCKER_HUB_PASSWORD docker.io"
+                        }
                     }
                 }
             }
         }
-        stage('Build SpringBoot-app Image'){
-            steps{
-                script{
-                    // Build the Docker image
-                    docker.build("ihebkhalfallah/mongo-demo:1")
+
+        stage('Build App Image') {
+            steps {
+                script {
+                    container('docker') {
+                        docker.build("ihebkhalfallah/mongo-demo:1")
+                    }
                 }
             }
         }
+
         stage('Test') {
             steps {
                 script {
-                    sh './mvnw test'
-                }
-            }
-        }
-        stage('Push SpringBoot-app Image'){
-            steps{
-                script{
-                     //Push the Docker image
-                    docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
-                        docker.image("ihebkhalfallah/mongo-demo:1").push()
+                    withEnv(["JAVA_HOME=${env.JAVA_HOME}", "PATH=${env.PATH}"]) {
+                        container('maven') {
+                            sh './mvnw test'
+                        }
                     }
                 }
             }
         }
+
+        stage('Push App Image') {
+            steps {
+                script {
+                    container('docker') {
+                        withCredentials([usernamePassword(credentialsId: 'TunisianDeveloper', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
+                            docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
+                                docker.image("ihebkhalfallah/mongo-demo:1").push()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         stage('Build and Push MongoDB Initialization Image') {
             steps {
                 script {
-                    // Build the Docker image for MongoDB initialization
-                    docker.build("mongodb-image:1", "-f Dockerfile-mongodb-init .")
-
-                    // Push the Docker image to your registry
-                    docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
-                        docker.image("mongodb-image:1").push()
+                    container('docker') {
+                        docker.build("mongodb-image:1", "-f Dockerfile-mongodb-init .")
+                        docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
+                            docker.image("mongodb-image:1").push()
+                        }
                     }
                 }
             }
         }
-        stage('Pull SpringBoot-app and MOngoDB Images'){
-            steps{
-                script{
-                    // Pull the Docker images
-                    docker.image("ihebkhalfallah/mongodb-image:1").pull()
-                    docker.image("ihebkhalfallah/mongo-demo:1").pull()
+
+        stage('Pull App and MongoDB Images') {
+            steps {
+                script {
+                    container('docker') {
+                        docker.image("ihebkhalfallah/mongodb-image:1").pull()
+                        docker.image("ihebkhalfallah/mongo-demo:1").pull()
+                    }
                 }
             }
         }
+
         stage('Start Container') {
             steps {
                 script {
-                    sh 'docker-compose version'
-                    // Run Docker Compose
-                    sh 'docker compose ps'
-                    sh 'docker compose down'
-                    sh 'docker compose up -d --no-cache --wait'
-                    sh 'docker compose ps'
+                    container('docker') {
+                        sh 'docker-compose version'
+                        sh 'docker compose ps'
+                        sh 'docker compose down'
+                        sh 'docker compose up -d --no-cache --wait'
+                        sh 'docker compose ps'
+                    }
                 }
             }
         }
-        
     }
 
     post {
