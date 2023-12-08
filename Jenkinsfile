@@ -34,25 +34,32 @@ pipeline {
                 }
             }
         }
-        stage('Build Image'){
-            steps{
-                script{
+        //stage('Build Image'){
+            //steps{
+                //script{
                     // Build the Docker image
-                    docker.build("ihebkhalfallah/mongo-demo:1")
+                    //docker.build("ihebkhalfallah/mongo-demo:1")
+                //}
+            //}
+        //}
+        stage('Test') {
+            steps {
+                script {
+                    sh './mvnw test'
                 }
             }
         }
-        stage('Push'){
-            steps{
-                script{
+        //stage('Push'){
+            //steps{
+                //script{
                 
                      //Push the Docker image
-                    docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
-                        docker.image("ihebkhalfallah/mongo-demo:1").push()
-                    }
-                }
-            }
-        }
+                    //docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
+                        //docker.image("ihebkhalfallah/mongo-demo:1").push()
+                    //}
+                //}
+            //}
+        //}
         //stage('Pull'){
             //steps{
                 //script{
@@ -69,22 +76,11 @@ pipeline {
                     checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Iheb-khalfallah/exam-devops.git']])
                     //sh 'docker pull mongo:latest'
                     // Run Docker Compose
-                    dockerCompose(
-                        dockerComposeFile: 'docker-compose.yml',
-                        build: true,
-                        pull: true,
-                        up: ' -d'
-                    )
+                    dockerCompose(buildFile: 'docker-compose.yml', up: '-d')
                 }
             }
         }
-        stage('Test') {
-            steps {
-                script {
-                    sh './mvnw test'
-                }
-            }
-        }
+        
     }
 
     post {
