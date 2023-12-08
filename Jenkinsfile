@@ -73,17 +73,17 @@ pipeline {
             }
         }
 
-        stage('Clean Up') {
-            steps {
-                script {
+        //stage('Clean Up') {
+            //steps {
+                //script {
                     // Clean up Docker images and containers
-                    sh 'docker system prune -a --volumes -f'
+                    //sh 'docker system prune -a --volumes -f'
 
                     // Clean up Jenkins workspace
-                    cleanWs()
-                }
-            }
-        }
+                    //cleanWs()
+                //}
+            //}
+        //}
     }
 
     post {
