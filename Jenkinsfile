@@ -24,18 +24,6 @@ pipeline {
             }
         }
 
-        stage('Clean Up') {
-            steps {
-                script {
-                    // Clean up Docker images and containers
-                    sh 'docker system prune -a --volumes -f'
-
-                    // Clean up Jenkins workspace
-                    cleanWs()
-                }
-            }
-        }
-
         stage('Test') {
             steps {
                 script {
@@ -81,6 +69,18 @@ pipeline {
                 script{
                     // Pull the Docker image
                     docker.image("ihebkhalfallah/mongo-demo:1").push()
+                }
+            }
+        }
+
+        stage('Clean Up') {
+            steps {
+                script {
+                    // Clean up Docker images and containers
+                    sh 'docker system prune -a --volumes -f'
+
+                    // Clean up Jenkins workspace
+                    cleanWs()
                 }
             }
         }
