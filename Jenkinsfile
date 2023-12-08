@@ -4,6 +4,9 @@ pipeline {
     environment {
         JAVA_HOME = '/var/lib/jenkins/jdk-17'
         PATH = "$JAVA_HOME/bin:$PATH"
+        KUBERNETES_NAMESPACE = 'default'  // Kubernetes namespace
+        KUBERNETES_CLOUD = 'my-k8s-cloud'  // Kubernetes cloud name in Jenkins
+        KUBE_CONFIG = '/var/lib/jenkins/.kube/config'
     }
 
     tools {
@@ -12,6 +15,16 @@ pipeline {
     }
 
     stages {
+
+        stage('Install Minikube') {
+            steps {
+                script {
+                    sh 'curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64'
+                    sh 'sudo install minikube-linux-amd64 /usr/local/bin/minikube'
+                    sh 'minikube start'
+                }
+            }
+        }
         
         //stage('Download and Install OpenJDK') {
             //steps {
@@ -96,18 +109,39 @@ pipeline {
             }
         }
 
-        stage('Deploy to Kubernetes') {
-            agent {
-                kubernetes {
-                    cloud 'your-kubernetes-cloud-name'
-                    label 'kubernetes-pod-label'
+        stage('Configure Kubernetes in Jenkins') {
+            steps {
+                script {
+                    // Set Kubernetes cloud configuration in Jenkins
+                    configFileProvider([configFile(fileContent: """apiVersion: v1
+                    clusters:
+                    - cluster:
+                        server: http://localhost:7070
+                      name: minikube
+                    contexts:
+                    - context:
+                        cluster: minikube
+                        user: minikube
+                      name: minikube
+                    current-context: minikube
+                    kind: Config
+                    preferences: {}
+                    users:
+                    - name: minikube
+                      user:
+                        token: """, variable: 'KUBE_CONFIG'}), pollSCM('*/5 * * * *')])
+                    }
                 }
             }
+        }
+
+        stage('Build and Deploy to Kubernetes') {
             steps {
-                container('your-kubernetes-container-name') {
-                    script {
-                        sh 'kubectl apply -f spring-boot-app-deployment.yaml'
-                    }
+                script {
+                    // Build and deploy your application using kubectl
+                    sh 'kubectl config use-context minikube'
+                    sh 'kubectl run my-app --image=nginx --port=70'
+                    sh 'kubectl expose deployment my-app --type=NodePort --port=70'
                 }
             }
         }
@@ -133,6 +167,13 @@ pipeline {
 
         failure {
             echo 'Build, tests, or Docker image creation, push and pull failed.'
+        }
+
+        always {
+            // Cleanup: Stop and delete Minikube after the pipeline is done
+            script {
+                sh 'minikube stop'
+            }
         }
     }
 }
