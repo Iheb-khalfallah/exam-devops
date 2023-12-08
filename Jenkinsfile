@@ -96,6 +96,23 @@ pipeline {
             }
         }
 
+        stage('Deploy to Kubernetes') {
+            agent {
+                kubernetes {
+                    cloud 'your-kubernetes-cloud-name'
+                    label 'kubernetes-pod-label'
+                }
+            }
+            steps {
+                container('your-kubernetes-container-name') {
+                    script {
+                        sh 'kubectl apply -f spring-boot-app-deployment.yaml'
+                    }
+                }
+            }
+        }
+
+
         //stage('Clean Up') {
             //steps {
                 //script {
