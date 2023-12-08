@@ -17,4 +17,4 @@ EXPOSE 9090
 CMD ["java", "-jar", "mongo-demo-0.0.1-SNAPSHOT.jar"]
 
 # Specify the network to connect to
-NETWORK springboot-ci_backend
+NETWORK SpringBoot-CI_backend
