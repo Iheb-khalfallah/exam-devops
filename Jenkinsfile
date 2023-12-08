@@ -23,6 +23,26 @@ pipeline {
                 sh 'mvn clean install -U'
             }
         }
+
+        stage('Clean Up') {
+            steps {
+                script {
+                    // Clean up Docker images and containers
+                    sh 'docker system prune -a --volumes -f'
+
+                    // Clean up Jenkins workspace
+                    cleanWs()
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                script {
+                    sh './mvnw test'
+                }
+            }
+        }
        
         stage('Docker Login') {
             steps {
@@ -34,6 +54,7 @@ pipeline {
                 }
             }
         }
+        
         stage('Build Image'){
             steps{
                 script{
@@ -42,6 +63,7 @@ pipeline {
                 }
             }
         }
+        
         stage('Push'){
             steps{
                 script{
@@ -53,6 +75,7 @@ pipeline {
                 }
             }
         }
+        
         stage('Pull'){
             steps{
                 script{
@@ -61,22 +84,15 @@ pipeline {
                 }
             }
         }
-        stage('Test') {
-            steps {
-                script {
-                    sh './mvnw test'
-                }
-            }
-        }
     }
 
     post {
         success {
-            echo 'Build, tests, and Docker image creation passed.'
+            echo 'Build, tests, and Docker image creation, push and pull passed.'
         }
 
         failure {
-            echo 'Build, tests, or Docker image creation failed.'
+            echo 'Build, tests, or Docker image creation, push and pull failed.'
         }
     }
 }
