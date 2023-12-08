@@ -1,6 +1,9 @@
 # Use a base image with the desired version of OpenJDK
 FROM openjdk:17
 
+# Use mongo image 
+FROM mongo:latest
+
 # Set the working directory in the container
 WORKDIR /app
 
