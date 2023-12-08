@@ -10,7 +10,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: admin
-      MONGO_INITDB_DATABASE: mongodb
+      MONGO_INITDB_DATABASE: gte3
 
   # Spring Boot application service
   spring-app:
