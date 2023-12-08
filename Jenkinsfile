@@ -81,6 +81,7 @@ pipeline {
                     sh 'docker-compose version'
                     sh 'docker pull mongo:latest'
                     // Run Docker Compose
+                    sh 'docker compose ps'
                     sh 'docker compose down --remove-orphans -v'
                     sh 'docker compose up -d --no-color --wait'
                     sh 'docker compose ps'
