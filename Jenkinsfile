@@ -23,16 +23,6 @@ pipeline {
             }
         }
 
-        stage('Prune Docker Data') {
-            steps {
-                script {
-                    container('docker') {
-                        sh 'docker system prune -a --volumes -f'
-                    }
-                }
-            }
-        }
-
         stage('Docker Login') {
             steps {
                 script {
@@ -87,7 +77,7 @@ pipeline {
                     container('docker') {
                         docker.build("mongodb-image:1", "-f Dockerfile-mongodb-init .")
                         docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
-                            docker.image("mongodb-image:1").push()
+                            docker.image("ihebkhalfallah/mongodb-image:1").push()
                         }
                     }
                 }
