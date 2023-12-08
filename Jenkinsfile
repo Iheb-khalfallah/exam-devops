@@ -68,7 +68,7 @@ pipeline {
             steps{
                 script{
                     // Pull the Docker image
-                    docker.image("ihebkhalfallah/mongo-demo:1").push()
+                    docker.image("ihebkhalfallah/mongo-demo:1").pull()
                 }
             }
         }
