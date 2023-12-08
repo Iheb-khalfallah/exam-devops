@@ -72,6 +72,15 @@ pipeline {
                 }
             }
         }
+        
+        stage('Docker Compose UP') {
+            steps {
+                script {
+                    // Deploy the Docker Compose environment
+                    sh 'docker-compose up -d'
+                }
+            }
+        }
 
         //stage('Clean Up') {
             //steps {
