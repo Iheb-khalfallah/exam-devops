@@ -68,24 +68,22 @@ pipeline {
                 }
             }
         }
-        stage('Docker Compose') {
+        stage('Prune Docker Data') {
             steps {
                 script {
-                    // Clone the GitHub repository
-                    checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Iheb-khalfallah/exam-devops.git']])
+                    sh 'docker system prune -a --volumes -f'
+                }
+            }
+        }
+        stage('Start Container') {
+            steps {
+                script {
                     sh 'docker-compose version'
-                    sh 'docker-compose config'
                     sh 'docker pull mongo:latest'
                     // Run Docker Compose
-                    dockerCompose(
-                        build: 'down',
-                        yaml: 'docker-compose.yml'
-                    )
-                    dockerCompose(
-                        build: 'up',
-                        pull: true,
-                        yaml: 'docker-compose.yml'
-                    )
+                    sh 'docker compose down --remove-orphans -v'
+                    sh 'docker compose up -d --no-color --wait'
+                    sh 'docker compose ps'
                 }
             }
         }
