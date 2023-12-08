@@ -68,7 +68,9 @@ pipeline {
             steps{
                 script{
                     // Pull the Docker image
-                    docker.image("ihebkhalfallah/mongo-demo:1").pull()
+                    docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
+                        docker.image("ihebkhalfallah/mongo-demo:1").pull()
+                    }
                 }
             }
         }
