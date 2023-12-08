@@ -75,6 +75,7 @@ pipeline {
                     // Clone the GitHub repository
                     checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Iheb-khalfallah/exam-devops.git']])
                     sh 'docker-compose version'
+                    sh 'docker-compose config'
                     //sh 'docker pull mongo:latest'
                     // Run Docker Compose
                     dockerCompose(
