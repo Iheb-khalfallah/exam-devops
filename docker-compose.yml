@@ -4,11 +4,13 @@ services:
   spring-boot-app:
     image: ihebkhalfallah/mongo-demo:1
     ports:
-      - "9090:9090"
+      - "8080:8080"
     depends_on:
       - mongo
     environment:
-      SPRING_DATA_MONGODB_URI: "mongodb://mongo:27017/demo-db"
+      SPRING_DATA_MONGODB_URI: "mongodb://mongo:27017/gte3"
+    networks:
+      - backend
 
   mongo:
     image: mongo
@@ -16,7 +18,11 @@ services:
       - "27017:27017"
     volumes:
       - mongodb-data:/data/db
+    networks:
+      - backend
 
 volumes:
   mongodb-data:
 
+networks:
+  backend:
