@@ -1,23 +1,22 @@
 version: '3'
-services:
-  # MongoDB service
-  mongodb:
-    build:
-      context: .
-      dockerfile: Dockerfile-mongodb
-    ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: admin
-      MONGO_INITDB_DATABASE: gte3
 
-  # Spring Boot application service
-  spring-app:
-    build:
-      context: .
-      dockerfile: Dockerfile-spring
+services:
+  spring-boot-app:
+    image: ihebkhalfallah/mongo-demo:1
     ports:
       - "9090:9090"
     depends_on:
-      - mongodb
+      - mongo
+    environment:
+      SPRING_DATA_MONGODB_URI: "mongodb://mongo:27017/demo-db"
+
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+
+volumes:
+  mongodb-data:
+
