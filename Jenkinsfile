@@ -34,14 +34,14 @@ pipeline {
                 }
             }
         }
-        //stage('Build Image'){
-            //steps{
-                //script{
+        stage('Build Image'){
+            steps{
+                script{
                     // Build the Docker image
-                    //docker.build("ihebkhalfallah/mongo-demo:1")
-                //}
-            //}
-        //}
+                    docker.build("ihebkhalfallah/mongo-demo:1")
+                }
+            }
+        }
         stage('Test') {
             steps {
                 script {
@@ -49,26 +49,25 @@ pipeline {
                 }
             }
         }
-        //stage('Push'){
-            //steps{
-                //script{
-                
+        stage('Push'){
+            steps{
+                script{
                      //Push the Docker image
-                    //docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
-                        //docker.image("ihebkhalfallah/mongo-demo:1").push()
-                    //}
-                //}
-            //}
-        //}
-        //stage('Pull'){
-            //steps{
-                //script{
+                    docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
+                        docker.image("ihebkhalfallah/mongo-demo:1").push()
+                    }
+                }
+            }
+        }
+        stage('Pull'){
+            steps{
+                script{
                 
                     // Pull the Docker image
-                    //docker.image("ihebkhalfallah/mongo-demo:1").push()
-                //}
-            //}
-        //}
+                    docker.image("ihebkhalfallah/mongo-demo:1").push()
+                }
+            }
+        }
         stage('Docker Compose') {
             steps {
                 script {
@@ -76,8 +75,12 @@ pipeline {
                     checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Iheb-khalfallah/exam-devops.git']])
                     sh 'docker-compose version'
                     sh 'docker-compose config'
-                    //sh 'docker pull mongo:latest'
+                    sh 'docker pull mongo:latest'
                     // Run Docker Compose
+                    dockerCompose(
+                        build: 'down',
+                        yaml: 'docker-compose.yml'
+                    )
                     dockerCompose(
                         build: 'up',
                         pull: true,
