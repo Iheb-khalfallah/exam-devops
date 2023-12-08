@@ -23,7 +23,13 @@ pipeline {
                 sh 'mvn clean install -U'
             }
         }
-        
+        stage('Prune Docker Data') {
+            steps {
+                script {
+                    sh 'docker system prune -a --volumes -f'
+                }
+            }
+        }
         stage('Docker Login') {
             steps {
                 script {
@@ -34,7 +40,7 @@ pipeline {
                 }
             }
         }
-        stage('Build Image'){
+        stage('Build SpringBoot-app Image'){
             steps{
                 script{
                     // Build the Docker image
@@ -49,7 +55,7 @@ pipeline {
                 }
             }
         }
-        stage('Push'){
+        stage('Push SpringBoot-app Image'){
             steps{
                 script{
                      //Push the Docker image
@@ -59,19 +65,25 @@ pipeline {
                 }
             }
         }
-        stage('Pull'){
-            steps{
-                script{
-                
-                    // Pull the Docker image
-                    docker.image("ihebkhalfallah/mongo-demo:1").push()
+        stage('Build and Push MongoDB Initialization Image') {
+            steps {
+                script {
+                    // Build the Docker image for MongoDB initialization
+                    docker.build("mongodb-image:1", "-f Dockerfile-mongodb-init .")
+
+                    // Push the Docker image to your registry
+                    docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
+                        docker.image("mongodb-image:1").push()
+                    }
                 }
             }
         }
-        stage('Prune Docker Data') {
-            steps {
-                script {
-                    sh 'docker system prune -a --volumes -f'
+        stage('Pull SpringBoot-app and MOngoDB Images'){
+            steps{
+                script{
+                    // Pull the Docker images
+                    docker.image("ihebkhalfallah/mongodb-image:1").pull()
+                    docker.image("ihebkhalfallah/mongo-demo:1").pull()
                 }
             }
         }
@@ -79,10 +91,9 @@ pipeline {
             steps {
                 script {
                     sh 'docker-compose version'
-                    sh 'docker pull mongo:latest'
                     // Run Docker Compose
                     sh 'docker compose ps'
-                    sh 'docker compose down --remove-orphans -v'
+                    sh 'docker compose down'
                     sh 'docker compose up -d --no-color --wait'
                     sh 'docker compose ps'
                 }
