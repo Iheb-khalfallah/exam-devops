@@ -102,7 +102,9 @@ pipeline {
                         sh 'docker-compose version'
                         sh 'docker compose ps'
                         sh 'docker compose down'
-                        sh 'docker compose up -d --no-cache --wait'
+                        docker.image('mongo-demo:1').container('docker') {
+                            sh 'docker compose up -d --no-cache --wait'
+                        }
                         sh 'docker compose ps'
                     }
                 }
