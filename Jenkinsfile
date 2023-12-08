@@ -94,7 +94,7 @@ pipeline {
                     // Run Docker Compose
                     sh 'docker compose ps'
                     sh 'docker compose down'
-                    sh 'docker compose up -d --no-color --wait'
+                    sh 'docker compose up -d --no-cache --wait'
                     sh 'docker compose ps'
                 }
             }
