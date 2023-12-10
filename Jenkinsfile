@@ -8,8 +8,8 @@ pipeline {
         MINIKUBE_HOME = "/var/lib/jenkins/.minikube"
         MINIKUBE_PATH = "/usr/local/bin:$MINIKUBE_HOME:$PATH"
 
-        SONARQUBE_HOME = "/var/lib/jenkins/sonar-scanner"
-        SONARQUBE_PATH = "$SONARQUBE_HOME/bin:$PATH"
+        //SONARQUBE_HOME = "/var/lib/jenkins/sonar-scanner"
+        //SONARQUBE_PATH = "$SONARQUBE_HOME/bin:$PATH"
         SONARQUBE_SCANNER_VERSION = '4.6.0.2311'
         SONARQUBE_SERVER = "http://localhost:9000"
         
@@ -21,6 +21,7 @@ pipeline {
     tools {
         maven 'maven'
         dockerTool 'docker'
+        sonarQubeScanner 'SonarQubeScanner'
     }
 
     stages {
@@ -177,16 +178,13 @@ pipeline {
 
 
 
-        stage('Code Quality Analysis') {
+        stage('SonarQube Analysis') {
             steps {
                 script {
-                    // Configure SonarQube
-                    withCredentials([string(credentialsId: 'SONARQUBE_TOKEN', variable: 'SONAR_TOKEN')]) {
-                        SONAR_TOKEN = sh(script: 'echo $SONAR_TOKEN', returnStdout: true).trim()
-                        withSonarQubeEnv('SONARQUBE_SERVER') {
-                            // Run SonarQube analysis
-                            sh "${SONARQUBE_HOME}/bin/sonar-scanner -Dsonar.login=${SONAR_TOKEN}"
-                        }
+                    // Configure SonarQube scanner
+                    withSonarQubeEnv('SONARQUBE_SERVER') {
+                        // Run SonarQube analysis
+                        sh "mvn sonar:sonar -Dsonar.login=${SONAR_TOKEN}"
                     }
                 }
             }
