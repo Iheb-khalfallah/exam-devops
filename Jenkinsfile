@@ -131,7 +131,8 @@ pipeline {
             steps {
                 script {
                     // Check if Minikube is running
-                    def minikubeStatus = sh(script: 'minikube status', returnStatus: true).trim()
+                    def minikubeStatus = sh(script: 'minikube status', returnStdout: true).trim()
+
         
                     if (minikubeStatus != 'Running') {
                         error "Minikube is not running. Please start Minikube first."
