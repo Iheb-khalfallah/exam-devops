@@ -22,7 +22,9 @@ services:
     volumes:
       - mongodb-data:/data/db
     networks:
-      - backend
+      backend:
+        aliases:
+          - mongo
 
 
 volumes:
