@@ -19,8 +19,16 @@ pipeline {
         stage('Install Minikube') {
             steps {
                 script {
+                    // Download Minikube binary
                     sh 'curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64'
-                    sh 'sudo install minikube-linux-amd64 /usr/local/bin/minikube'
+                    
+                    // Make it executable
+                    sh 'chmod +x minikube-linux-amd64'
+                    
+                    // Move it to /usr/local/bin/ using sudo
+                    sh 'sudo mv minikube-linux-amd64 /usr/local/bin/minikube'
+                    
+                    // Start Minikube
                     sh 'minikube start'
                 }
             }
