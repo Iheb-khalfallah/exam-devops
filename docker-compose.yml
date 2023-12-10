@@ -16,13 +16,10 @@ services:
     image: mongo
     ports:
       - "27017:27017"
+    networks:
+      - backend
     volumes:
       - mongodb-data:/data/db
-    networks:
-      backend:
-        aliases:
-          - mongo
-
 
 volumes:
   mongodb-data:
