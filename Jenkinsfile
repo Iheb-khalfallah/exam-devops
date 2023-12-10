@@ -32,29 +32,29 @@ pipeline {
         stage('Install Minikube and Kubectl') {
             steps {
                 script {
-                    try {
+                    //try {
                         // Download Minikube binary
-                        sh 'curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64'
+                        //sh 'curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64'
                         // Make it executable
-                        sh 'chmod +x minikube-linux-amd64'
+                        //sh 'chmod +x minikube-linux-amd64'
                         // Move it to /usr/local/bin/ 
-                        sh 'echo Iheb123 | sudo -S mv minikube-linux-amd64 /usr/local/bin/minikube'
+                        //sh 'echo Iheb123 | sudo -S mv minikube-linux-amd64 /usr/local/bin/minikube'
                         
                         // Start Minikube
-                        sh 'minikube start'
+                    sh 'minikube start --vm-driver=none'
                         
                         // Install kubectl
-                        sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
-                        sh 'chmod +x kubectl'
-                        sh 'echo Iheb123 | sudo -S mv kubectl /usr/local/bin/kubectl'
+                        //sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
+                        //sh 'chmod +x kubectl'
+                        //sh 'echo Iheb123 | sudo -S mv kubectl /usr/local/bin/kubectl'
                         
-                    } catch (Exception e) {
+                    //} catch (Exception e) {
                         currentBuild.result = 'FAILURE'
-                        error("Failed to install Minikube and kubectl: ${e.message}")
-                    } finally {
+                        //error("Failed to install Minikube and kubectl: ${e.message}")
+                    //} finally {
                         // Clean up downloaded files
-                        sh 'rm -f minikube-linux-amd64 kubectl'
-                    }
+                        //sh 'rm -f minikube-linux-amd64 kubectl'
+                    //}
                 }
             }
         }
@@ -127,14 +127,29 @@ pipeline {
             }
         }
 
-        stage('Configure Kubernetes in ') {
+        stage('Configure Kubernetes') {
             steps {
                 script {
-                    // Assuming that Minikube is running on the  agent
-                    sh 'cp $MINIKUBE_HOME/.kube/config $KUBE_CONFIG'
+                    // Check if Minikube is running
+                    def minikubeStatus = sh(script: 'minikube status --format="{{.MinikubeStatus}}"', returnStatus: true).trim()
+        
+                    if (minikubeStatus != 'Running') {
+                        error "Minikube is not running. Please start Minikube first."
+                    }
+        
+                    // Check if the Kubernetes configuration file exists
+                    def kubeConfigPath = sh(script: 'echo $MINIKUBE_HOME/.kube/config', returnStdout: true).trim()
+        
+                    if (!fileExists(kubeConfigPath)) {
+                        error "Kubernetes configuration file not found. Ensure Minikube is properly configured."
+                    }
+        
+                    // Copy the Kubernetes configuration
+                    sh "cp $kubeConfigPath $KUBE_CONFIG"
                 }
             }
         }
+
 
         stage('Build and Deploy to Kubernetes') {
             steps {
