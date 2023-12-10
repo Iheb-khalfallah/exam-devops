@@ -65,17 +65,17 @@ pipeline {
             }
         }
 
-        stage('Install SonarQube Scanner') {
-            steps {
-                script {
+        //stage('Install SonarQube Scanner') {
+            //steps {
+                //script {
                     // Download and install SonarQube Scanner
-                    sh "curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONARQUBE_SCANNER_VERSION}-linux.zip"
-                    sh 'unzip sonar-scanner.zip'
-                    sh 'rm sonar-scanner.zip'
-                    sh 'mv sonar-scanner-* $SONARQUBE_HOME'
-                }
-            }
-        }
+                    //sh "curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONARQUBE_SCANNER_VERSION}-linux.zip"
+                    //sh 'unzip sonar-scanner.zip'
+                    //sh 'rm sonar-scanner.zip'
+                    //sh 'mv sonar-scanner-* $SONARQUBE_HOME'
+                //}
+            //}
+        //}
 
 
         stage('Build Maven') {
