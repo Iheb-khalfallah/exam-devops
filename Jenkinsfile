@@ -138,9 +138,9 @@ pipeline {
                     //sh 'kubectl create deployment my-app --image=nginx --port=70'
 
                     // Run it
-                    sh 'kubectl run deployment my-app --image=nginx --port=70'
+                    sh 'kubectl run deployment my-deployed-app --image=nginx --port=70'
                     // Expose the deployment
-                    sh 'kubectl expose deployment my-app --type=NodePort --port=70'
+                    sh 'kubectl expose deployment my-deployed-app --type=NodePort --port=70'
                 }
             }
         }
