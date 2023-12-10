@@ -20,7 +20,7 @@ pipeline {
     tools {
         maven 'maven'
         dockerTool 'docker'
-        sonarqubeScanner 'SonarQubeScanner'
+        //sonarqubeScanner 'SonarQubeScanner'
     }
 
     stages {
