@@ -72,6 +72,7 @@ pipeline {
                     sh "curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONARQUBE_SCANNER_VERSION}-linux.zip"
                     sh 'unzip sonar-scanner.zip'
                     sh 'rm sonar-scanner.zip'
+                    sh 'mv sonar-scanner-* $SONARQUBE_HOME'
                 }
             }
         }
@@ -173,32 +174,7 @@ pipeline {
             }
         }
 
-To install and configure SonarQube Scanner within a Jenkins pipeline and set its path in the environment, you can follow the example below. This example assumes that you have already set up SonarQube and have the required authentication tokens.
 
-groovy
-
-pipeline {
-    agent any
-
-    environment {
-        JAVA_HOME = '/var/lib/jenkins/jdk-17'
-        SONARQUBE_HOME = "/path/to/sonar-scanner"  // Set this to the actual path
-        PATH = "$JAVA_HOME/bin:$SONARQUBE_HOME/bin:$PATH"
-        SONARQUBE_SCANNER_VERSION = '4.6.0.2311'  // Set this to the desired version
-    }
-
-    stages {
-        stage('Install SonarQube Scanner') {
-            steps {
-                script {
-                    // Download and install SonarQube Scanner
-                    sh "curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONARQUBE_SCANNER_VERSION}-linux.zip"
-                    sh 'unzip sonar-scanner.zip'
-                    sh 'rm sonar-scanner.zip'
-                    sh 'mv sonar-scanner-* $SONARQUBE_HOME'
-                }
-            }
-        }
 
         stage('Code Quality Analysis') {
             steps {
