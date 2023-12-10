@@ -62,20 +62,12 @@ pipeline {
                 }
             }
         }
-
         stage('Uninstall SonarQube') {
             steps {
                 script {
-                    // Stop SonarQube if it's running
                     sh 'sudo systemctl stop sonarqube'
-
-                    // Remove SonarQube directory
                     sh 'sudo rm -rf /opt/sonarqube'
-
-                    // Remove systemd service
                     sh 'sudo rm /etc/systemd/system/sonarqube.service'
-
-                    // Remove SonarQube user (if created)
                     sh 'sudo userdel sonarqube'
                 }
             }
