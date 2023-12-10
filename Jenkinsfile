@@ -69,13 +69,13 @@ pipeline {
                     sh 'docker-compose down'
         
                     // Remove SonarQube directory (if it exists)
-                    sh 'sudo rm -rf /opt/sonarqube'
+                    sh 'echo Iheb123 | sudo -S rm -rf /opt/sonarqube'
         
                     // Remove systemd service (if it exists)
-                    sh 'sudo rm /etc/systemd/system/sonarqube.service'
+                    sh 'echo Iheb123 | sudo -S rm /etc/systemd/system/sonarqube.service'
         
                     // Remove SonarQube user (if created)
-                    sh 'sudo userdel sonarqube'
+                    sh 'echo Iheb123 | sudo -S userdel sonarqube'
                 }
             }
         }
