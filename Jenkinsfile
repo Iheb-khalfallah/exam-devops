@@ -9,6 +9,7 @@ pipeline {
         MINIKUBE_PATH = "/usr/local/bin:$MINIKUBE_HOME:$PATH"
 
         SONARQUBE_HOME = "/var/lib/jenkins/sonar-scanner"
+        SONARQUBE_PATH = "$SONARQUBE_HOME/bin:$PATH"
         SONARQUBE_SCANNER_VERSION = '4.6.0.2311'
         
         KUBE_CONFIG = "$MINIKUBE_HOME/.kube/config"
