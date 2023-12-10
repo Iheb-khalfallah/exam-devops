@@ -133,12 +133,16 @@ pipeline {
                 script {
                     // Build and deploy your application using kubectl
                     sh 'kubectl config use-context minikube'
-                    // Adjust this section based on your actual application and deployment needs
-                    sh 'kubectl run my-app --image=nginx --port=70'
+        
+                    // Create a Kubernetes deployment
+                    sh 'kubectl create deployment my-app --image=nginx --port=70'
+        
+                    // Expose the deployment
                     sh 'kubectl expose deployment my-app --type=NodePort --port=70'
                 }
             }
         }
+
     }
 
     post {
