@@ -127,23 +127,6 @@ pipeline {
             }
         }
 
-        stage('Configure Kubernetes') {
-            steps {
-                script {
-        
-                    // Check if the Kubernetes configuration file exists
-                    //def kubeConfigPath = sh(script: 'echo $MINIKUBE_HOME/.kube/config', returnStdout: true).trim()
-        
-                    //if (!fileExists(kubeConfigPath)) {
-                        //error "Kubernetes configuration file not found. Ensure Minikube is properly configured."
-                    //}
-        
-                    // Copy the Kubernetes configuration
-                    sh "cp $kubeConfigPath $KUBE_CONFIG"
-                }
-            }
-        }
-
 
         stage('Build and Deploy to Kubernetes') {
             steps {
