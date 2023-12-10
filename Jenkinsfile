@@ -153,9 +153,6 @@ pipeline {
                     // Get the NodePort assigned
                     def nodePort = sh(script: 'kubectl get svc my-deployed-app -o=jsonpath="{.spec.ports[0].nodePort}"', returnStdout: true).trim()
 
-                    sh 'kubectl describe deployment my-deployed-app'
-                    sh 'kubectl describe svc my-deployed-app'
-
                     // Access the application using the Minikube IP and NodePort
                     echo "Your application is accessible at: http://${minikubeIP}:${nodePort}"
                 }
@@ -163,6 +160,24 @@ pipeline {
         }
 
 
+        stage('Check Deployment and Service') {
+            steps {
+                script {
+                    // Check the status of the deployment
+                    sh 'kubectl get deployment my-deployed-app'
+    
+                    // Check the status of the pods
+                    sh 'kubectl get pods -l app=my-deployed-app'
+    
+                    // Retrieve logs from the pods (replace <pod-name> with the actual pod name)
+                    sh 'kubectl logs -l app=my-deployed-app'
+    
+                    // Describe the deployment and service
+                    sh 'kubectl describe deployment my-deployed-app'
+                    sh 'kubectl describe svc my-deployed-app'
+                }
+            }
+        }
 
         stage('SonarQube Analysis') {
             steps {
