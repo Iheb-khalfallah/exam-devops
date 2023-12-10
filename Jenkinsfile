@@ -181,7 +181,7 @@ pipeline {
             steps {
                 script {
                     // Configure SonarQube scanner
-                    withSonarQubeEnv('SONARQUBE_SERVER') {
+                    withSonarQubeEnv('sonar-server') {
                         // Run SonarQube analysis
                         sh "mvn sonar:sonar -Dsonar.login=${SONAR_TOKEN}"
                     }
