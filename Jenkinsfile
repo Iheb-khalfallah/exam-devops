@@ -143,6 +143,18 @@ pipeline {
             }
         }
 
+        //stage('Clean Up') {
+            //steps {
+                //script {
+                    // Clean up Docker images and containers
+                    //sh 'docker system prune -a --volumes -f'
+
+                    // Clean up Jenkins workspace
+                    //cleanWs()
+                //}
+            //}
+        //}
+
     }
 
     post {
@@ -154,12 +166,12 @@ pipeline {
             echo 'Build, tests, or Docker image creation, push, and pull failed.'
         }
 
-        always {
+        //always {
             // Cleanup: Stop Minikube after the pipeline is done
-            script {
-                sh 'minikube stop'
-            }
-        }
+            //script {
+                //sh 'minikube stop'
+            //}
+        //}
     }
 }
 
