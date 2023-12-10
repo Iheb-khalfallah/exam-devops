@@ -16,7 +16,7 @@ pipeline {
 
     stages {
 
-        stage('Install Minikube') {
+        stage('Install Minikube and Kubectl') {
             steps {
                 script {
                     // Download Minikube binary
@@ -30,6 +30,11 @@ pipeline {
                     
                     // Start Minikube
                     sh 'minikube start'
+                    
+                    // Install kubectl
+                    sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
+                    sh 'chmod +x kubectl'
+                    sh 'sudo mv kubectl /usr/local/bin/'
                 }
             }
         }
