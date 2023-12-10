@@ -49,7 +49,7 @@ pipeline {
                         //sh 'echo Iheb123 | sudo -S mv kubectl /usr/local/bin/kubectl'
                         
                     //} catch (Exception e) {
-                        currentBuild.result = 'FAILURE'
+                        //currentBuild.result = 'FAILURE'
                         //error("Failed to install Minikube and kubectl: ${e.message}")
                     //} finally {
                         // Clean up downloaded files
@@ -95,16 +95,16 @@ pipeline {
             }
         }
 
-        stage('Push') {
-            steps {
-                script {
+        //stage('Push') {
+            //steps {
+                //script {
                     // Push the Docker image
-                    docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
-                        docker.image("ihebkhalfallah/mongo-demo:1").push()
-                    }
-                }
-            }
-        }
+                    //docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
+                        //docker.image("ihebkhalfallah/mongo-demo:1").push()
+                    //}
+                //}
+            //}
+        //}
 
         //stage('Pull'){
             //steps{
