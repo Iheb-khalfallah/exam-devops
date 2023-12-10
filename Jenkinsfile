@@ -86,14 +86,14 @@ pipeline {
             }
         }
 
-        stage('Build Image') {
-            steps {
-                script {
+        //stage('Build Image') {
+            //steps {
+                //script {
                     // Build the Docker image
-                    docker.build("ihebkhalfallah/mongo-demo:1")
-                }
-            }
-        }
+                    //docker.build("ihebkhalfallah/mongo-demo:1")
+                //}
+            //}
+        //}
 
         //stage('Push') {
             //steps {
