@@ -4,9 +4,11 @@ pipeline {
     environment {
         JAVA_HOME = '/var/lib/jenkins/jdk-17'
         PATH = "$JAVA_HOME/bin:$PATH"
+        MINIKUBE_HOME = "/var/jenkins_home/.minikube"
+        PATH = "/usr/local/bin:$MINIKUBE_HOME:$PATH"
+        KUBE_CONFIG = "$MINIKUBE_HOME/.kube/config"
         KUBERNETES_NAMESPACE = 'default'  // Kubernetes namespace
         KUBERNETES_CLOUD = 'my-k8s-cloud'  // Kubernetes cloud name in Jenkins
-        KUBE_CONFIG = '/var/lib/jenkins/.kube/config'
     }
 
     tools {
@@ -16,29 +18,6 @@ pipeline {
 
     stages {
 
-        stage('Install Minikube and Kubectl') {
-            steps {
-                script {
-                    // Download Minikube binary
-                    sh 'curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64'
-                    
-                    // Make it executable
-                    sh 'chmod +x minikube-linux-amd64'
-                    
-                    // Move it to /usr/local/bin/ using sudo with -S option
-                    sh 'echo Iheb123 | sudo -S mv minikube-linux-amd64 /usr/local/bin/minikube'
-                    
-                    // Start Minikube
-                    sh 'minikube start'
-                    
-                    // Install kubectl
-                    sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
-                    sh 'chmod +x kubectl'
-                    sh 'sudo mv kubectl /usr/local/bin/'
-                }
-            }
-        }
-        
         //stage('Download and Install OpenJDK') {
             //steps {
                 //script {
@@ -50,6 +29,25 @@ pipeline {
             //}
         //}
         
+        stage('Install Minikube and Kubectl') {
+            steps {
+                script {
+                    // Download Minikube binary
+                    sh 'curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64'
+                    // Make it executable
+                    sh 'chmod +x minikube-linux-amd64'
+                    // Move it to /usr/local/bin/ 
+                    sh 'mv minikube-linux-amd64 /usr/local/bin/minikube'
+                    // Start Minikube
+                    sh 'minikube start'
+                    // Install kubectl
+                    sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
+                    sh 'chmod +x kubectl'
+                    sh 'mv kubectl /usr/local/bin/kubectl'
+                }
+            }
+        }
+
         stage('Build Maven') {
             steps {
                 script {
@@ -68,7 +66,7 @@ pipeline {
                 }
             }
         }
-       
+
         stage('Docker Login') {
             steps {
                 script {
@@ -79,20 +77,19 @@ pipeline {
                 }
             }
         }
-        
-        stage('Build Image'){
-            steps{
-                script{
+
+        stage('Build Image') {
+            steps {
+                script {
                     // Build the Docker image
                     docker.build("ihebkhalfallah/mongo-demo:1")
                 }
             }
         }
-        
-        stage('Push'){
-            steps{
-                script{
-               
+
+        stage('Push') {
+            steps {
+                script {
                     // Push the Docker image
                     docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
                         docker.image("ihebkhalfallah/mongo-demo:1").push()
@@ -100,7 +97,7 @@ pipeline {
                 }
             }
         }
-        
+
         //stage('Pull'){
             //steps{
                 //script{
@@ -111,7 +108,7 @@ pipeline {
                 //}
             //}
         //}
-        
+
         stage('Docker Compose UP') {
             steps {
                 script {
@@ -125,23 +122,8 @@ pipeline {
         stage('Configure Kubernetes in Jenkins') {
             steps {
                 script {
-                    configFileProvider([configFile(fileContent: """apiVersion: v1
-clusters:
-- cluster:
-    server: http://localhost:7070
-  name: minikube
-contexts:
-- context:
-    cluster: minikube
-    user: minikube
-  name: minikube
-current-context: minikube
-kind: Config
-preferences: {}
-users:
-- name: minikube
-  user:
-    token: """, variable: 'KUBE_CONFIG'), pollSCM('*/5 * * * *')])
+                    // Assuming that Minikube is running on the Jenkins agent
+                    sh 'cp $MINIKUBE_HOME/.kube/config $KUBE_CONFIG'
                 }
             }
         }
@@ -151,33 +133,21 @@ users:
                 script {
                     // Build and deploy your application using kubectl
                     sh 'kubectl config use-context minikube'
+                    // Adjust this section based on your actual application and deployment needs
                     sh 'kubectl run my-app --image=nginx --port=70'
                     sh 'kubectl expose deployment my-app --type=NodePort --port=70'
                 }
             }
         }
-
-
-        //stage('Clean Up') {
-            //steps {
-                //script {
-                    // Clean up Docker images and containers
-                    //sh 'docker system prune -a --volumes -f'
-
-                    // Clean up Jenkins workspace
-                    //cleanWs()
-                //}
-            //}
-        //}
     }
 
     post {
         success {
-            echo 'Build, tests, and Docker image creation, push and pull passed.'
+            echo 'Build, tests, and Docker image creation, push, and pull passed.'
         }
 
         failure {
-            echo 'Build, tests, or Docker image creation, push and pull failed.'
+            echo 'Build, tests, or Docker image creation, push, and pull failed.'
         }
 
         always {
@@ -188,3 +158,4 @@ users:
         }
     }
 }
+
