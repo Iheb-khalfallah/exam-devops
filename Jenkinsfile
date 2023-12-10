@@ -133,12 +133,14 @@ pipeline {
                 script {
                     // Build and deploy your application using kubectl
                     sh 'kubectl config use-context minikube'
-        
+                    
+                    // Delete the existing deployment if it exists
+                    sh 'kubectl delete deployment my-deployed-app --ignore-not-found=true'
+                    
                     // Create first a Kubernetes deployment
                     sh 'kubectl create deployment my-deployed-app --image=nginx --port=70'
 
-                    // Run it
-                    //sh 'kubectl run deployment my-deployed-app --image=nginx --port=70'
+
                     // Expose the deployment
                     sh 'kubectl expose deployment my-deployed-app --type=NodePort --port=70'
 
