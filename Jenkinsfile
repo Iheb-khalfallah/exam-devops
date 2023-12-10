@@ -136,6 +136,7 @@ pipeline {
                     
                     // Delete the existing deployment if it exists
                     sh 'kubectl delete deployment my-deployed-app --ignore-not-found=true'
+                    sh 'kubectl delete service my-deployed-app --ignore-not-found=true'
                     
                     // Create first a Kubernetes deployment
                     sh 'kubectl create deployment my-deployed-app --image=nginx --port=70'
