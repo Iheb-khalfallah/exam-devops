@@ -181,7 +181,7 @@ pipeline {
                 script {
                     // Configure SonarQube
                     withCredentials([string(credentialsId: 'SONARQUBE_TOKEN', variable: 'SONAR_TOKEN')]) {
-                        withSonarQubeEnv('SONARQUBE_TOKEN') {
+                        withSonarQubeEnv('SONARQUBE_SERVER') {
                             // Run SonarQube analysis
                             sh "${SONARQUBE_HOME}/bin/sonar-scanner -Dsonar.login=${SONAR_TOKEN}"
                         }
