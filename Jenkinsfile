@@ -4,8 +4,13 @@ pipeline {
     environment {
         JAVA_HOME = '/var/lib/jenkins/jdk-17'
         JAVA_PATH = "$JAVA_HOME/bin:$PATH"
+        
         MINIKUBE_HOME = "/var/lib/jenkins/.minikube"
         MINIKUBE_PATH = "/usr/local/bin:$MINIKUBE_HOME:$PATH"
+
+        SONARQUBE_HOME = "/var/lib/jenkins/sonar-scanner"
+        SONARQUBE_SCANNER_VERSION = '4.6.0.2311'
+        
         KUBE_CONFIG = "$MINIKUBE_HOME/.kube/config"
         KUBERNETES_NAMESPACE = 'default'  // Kubernetes namespace
         KUBERNETES_CLOUD = 'my-k8s-cloud'  // Kubernetes cloud name in Jenkins
@@ -55,6 +60,17 @@ pipeline {
                         // Clean up downloaded files
                         //sh 'rm -f minikube-linux-amd64 kubectl'
                     //}
+                }
+            }
+        }
+
+        stage('Install SonarQube Scanner') {
+            steps {
+                script {
+                    // Download and install SonarQube Scanner
+                    sh "curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONARQUBE_SCANNER_VERSION}-linux.zip"
+                    sh 'unzip sonar-scanner.zip'
+                    sh 'rm sonar-scanner.zip'
                 }
             }
         }
@@ -152,6 +168,47 @@ pipeline {
         
                     // Access the application using the Minikube IP and NodePort
                     echo "Your application is accessible at: http://${minikubeIP}:${nodePort}"
+                }
+            }
+        }
+
+To install and configure SonarQube Scanner within a Jenkins pipeline and set its path in the environment, you can follow the example below. This example assumes that you have already set up SonarQube and have the required authentication tokens.
+
+groovy
+
+pipeline {
+    agent any
+
+    environment {
+        JAVA_HOME = '/var/lib/jenkins/jdk-17'
+        SONARQUBE_HOME = "/path/to/sonar-scanner"  // Set this to the actual path
+        PATH = "$JAVA_HOME/bin:$SONARQUBE_HOME/bin:$PATH"
+        SONARQUBE_SCANNER_VERSION = '4.6.0.2311'  // Set this to the desired version
+    }
+
+    stages {
+        stage('Install SonarQube Scanner') {
+            steps {
+                script {
+                    // Download and install SonarQube Scanner
+                    sh "curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONARQUBE_SCANNER_VERSION}-linux.zip"
+                    sh 'unzip sonar-scanner.zip'
+                    sh 'rm sonar-scanner.zip'
+                    sh 'mv sonar-scanner-* $SONARQUBE_HOME'
+                }
+            }
+        }
+
+        stage('Code Quality Analysis') {
+            steps {
+                script {
+                    // Configure SonarQube
+                    withCredentials([string(credentialsId: 'SONARQUBE_TOKEN', variable: 'SONAR_TOKEN')]) {
+                        withSonarQubeEnv('SonarQube') {
+                            // Run SonarQube analysis
+                            sh "${SONARQUBE_HOME}/bin/sonar-scanner -Dsonar.login=${SONAR_TOKEN}"
+                        }
+                    }
                 }
             }
         }
