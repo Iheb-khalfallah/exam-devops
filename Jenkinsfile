@@ -62,25 +62,7 @@ pipeline {
                 }
             }
         }
-        stage('Uninstall SonarQube') {
-            steps {
-                script {
-                    // Stop SonarQube if it's running using Docker Compose
-                    sh 'docker-compose down'
-        
-                    // Remove SonarQube directory (if it exists)
-                    sh 'echo Iheb123 | sudo -S rm -rf /opt/sonarqube'
-        
-                    // Remove systemd service (if it exists)
-                    sh 'echo Iheb123 | sudo -S rm /etc/systemd/system/sonarqube.service'
-        
-                    // Remove SonarQube user (if created)
-                    sh 'echo Iheb123 | sudo -S userdel sonarqube'
-                }
-            }
-        }
-
-        
+ 
         stage('Build Maven') {
             steps {
                 checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Iheb-khalfallah/exam-devops.git']])
