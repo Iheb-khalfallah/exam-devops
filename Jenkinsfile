@@ -142,7 +142,7 @@ pipeline {
                     sh 'kubectl delete service my-deployed-app --ignore-not-found=true'
                     
                     // Create first a Kubernetes deployment
-                    sh 'kubectl create deployment my-deployed-app --image=nginx --port=70'
+                    sh 'kubectl create deployment my-deployed-app --image=nginx:latest --port=70'
 
 
                     // Expose the deployment
