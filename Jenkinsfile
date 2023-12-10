@@ -11,7 +11,6 @@ pipeline {
         SONARQUBE_HOME = "/var/lib/jenkins/sonar-scanner"
         SONARQUBE_PATH = "$SONARQUBE_HOME/bin:$PATH"
         SONARQUBE_SCANNER_VERSION = '4.6.0.2311'
-        SONARQUBE_SERVER = 'SONARQUBE' 
         
         KUBE_CONFIG = "$MINIKUBE_HOME/.kube/config"
         KUBERNETES_NAMESPACE = 'default'  // Kubernetes namespace
@@ -182,10 +181,8 @@ pipeline {
                 script {
                     // Configure SonarQube
                     withCredentials([string(credentialsId: 'SONARQUBE_TOKEN', variable: 'SONAR_TOKEN')]) {
-                        withSonarQubeEnv('SONARQUBE') {
                             // Run SonarQube analysis
                             sh "${SONARQUBE_HOME}/bin/sonar-scanner -Dsonar.login=${SONAR_TOKEN}"
-                        }
                     }
                 }
             }
@@ -214,12 +211,12 @@ pipeline {
             echo 'Build, tests, or Docker image creation, push, and pull failed.'
         }
 
-        //always {
-            // Cleanup: Stop Minikube after the pipeline is done
-            //script {
-                //sh 'minikube stop'
-            //}
-        //}
+        always {
+            //Cleanup: Stop Minikube after the pipeline is done
+            script {
+                sh 'minikube stop'
+            }
+        }
     }
 }
 
