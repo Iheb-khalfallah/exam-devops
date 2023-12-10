@@ -135,12 +135,18 @@ pipeline {
                     sh 'kubectl config use-context minikube'
         
                     // Create first a Kubernetes deployment
-                    //sh 'kubectl create deployment my-app --image=nginx --port=70'
+                    sh 'kubectl create deployment my-app --image=nginx --port=70'
 
                     // Run it
-                    sh 'kubectl run deployment my-deployed-app --image=nginx --port=70'
+                    //sh 'kubectl run deployment my-deployed-app --image=nginx --port=70'
                     // Expose the deployment
                     sh 'kubectl expose deployment my-deployed-app --type=NodePort --port=70'
+
+                    // Get the NodePort assigned
+                    def nodePort = sh(script: 'kubectl get svc my-deployed-app -o=jsonpath="{.spec.ports[0].nodePort}"', returnStdout: true).trim()
+        
+                    // Access the application using the Minikube IP and NodePort
+                    echo "Your application is accessible at: http://192.168.49.2:$nodePort"
                 }
             }
         }
