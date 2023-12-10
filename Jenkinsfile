@@ -25,8 +25,8 @@ pipeline {
                     // Make it executable
                     sh 'chmod +x minikube-linux-amd64'
                     
-                    // Move it to /usr/local/bin/ using sudo
-                    sh 'sudo mv minikube-linux-amd64 /usr/local/bin/minikube'
+                    // Move it to /usr/local/bin/ using sudo with -S option
+                    sh 'echo Iheb123 | sudo -S mv minikube-linux-amd64 /usr/local/bin/minikube'
                     
                     // Start Minikube
                     sh 'minikube start'
