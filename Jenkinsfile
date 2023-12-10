@@ -167,7 +167,7 @@ pipeline {
                     // Configure SonarQube scanner
                     withSonarQubeEnv('sonar-server') {
                         // Run SonarQube analysis
-                        sh "mvn sonar:sonar -Dsonar.login=${SONAR_TOKEN}"
+                        sh "mvn sonar:sonar -Dsonar.login=${env.SONAR_TOKEN}"
                     }
                 }
             }
