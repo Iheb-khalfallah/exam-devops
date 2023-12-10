@@ -130,13 +130,6 @@ pipeline {
         stage('Configure Kubernetes') {
             steps {
                 script {
-                    // Check if Minikube is running
-                    def minikubeStatus = sh(script: 'minikube status --format="{{.MinikubeStatus}}"', returnStdout: true).trim()
-
-        
-                    if (minikubeStatus != 'Running') {
-                        error "Minikube is not running. Please start Minikube first."
-                    }
         
                     // Check if the Kubernetes configuration file exists
                     def kubeConfigPath = sh(script: 'echo $MINIKUBE_HOME/.kube/config', returnStdout: true).trim()
