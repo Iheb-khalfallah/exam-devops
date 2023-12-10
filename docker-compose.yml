@@ -24,20 +24,9 @@ services:
     networks:
       - backend
 
-  jenkins:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-      - "50000:50000"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - jenkins_home:/var/jenkins_home
 
 volumes:
   mongodb-data:
-  jenkins_home:
 
 networks:
   backend:
