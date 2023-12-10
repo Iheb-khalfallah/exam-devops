@@ -112,25 +112,23 @@ pipeline {
         stage('Configure Kubernetes in Jenkins') {
             steps {
                 script {
-                    // Set Kubernetes cloud configuration in Jenkins
                     configFileProvider([configFile(fileContent: """apiVersion: v1
-                    clusters:
-                    - cluster:
-                        server: http://localhost:7070
-                      name: minikube
-                    contexts:
-                    - context:
-                        cluster: minikube
-                        user: minikube
-                      name: minikube
-                    current-context: minikube
-                    kind: Config
-                    preferences: {}
-                    users:
-                    - name: minikube
-                      user:
-                        token: """, variable: 'KUBE_CONFIG'}), pollSCM('*/5 * * * *')])
-                    }
+clusters:
+- cluster:
+    server: http://localhost:7070
+  name: minikube
+contexts:
+- context:
+    cluster: minikube
+    user: minikube
+  name: minikube
+current-context: minikube
+kind: Config
+preferences: {}
+users:
+- name: minikube
+  user:
+    token: """, variable: 'KUBE_CONFIG'), pollSCM('*/5 * * * *')])
                 }
             }
         }
