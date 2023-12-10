@@ -32,21 +32,33 @@ pipeline {
         stage('Install Minikube and Kubectl') {
             steps {
                 script {
-                    // Download Minikube binary
-                    sh 'curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64'
-                    // Make it executable
-                    sh 'chmod +x minikube-linux-amd64'
-                    // Move it to /usr/local/bin/ 
-                    sh 'mv minikube-linux-amd64 /usr/local/bin/minikube'
-                    // Start Minikube
-                    sh 'minikube start'
-                    // Install kubectl
-                    sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
-                    sh 'chmod +x kubectl'
-                    sh 'mv kubectl /usr/local/bin/kubectl'
+                    try {
+                        // Download Minikube binary
+                        sh 'curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64'
+                        // Make it executable
+                        sh 'chmod +x minikube-linux-amd64'
+                        // Move it to /usr/local/bin/ 
+                        sh 'sudo -S mv minikube-linux-amd64 /usr/local/bin/minikube'
+                        
+                        // Start Minikube
+                        sh 'minikube start'
+                        
+                        // Install kubectl
+                        sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
+                        sh 'chmod +x kubectl'
+                        sh 'sudo -S mv kubectl /usr/local/bin/kubectl'
+                        
+                    } catch (Exception e) {
+                        currentBuild.result = 'FAILURE'
+                        error("Failed to install Minikube and kubectl: ${e.message}")
+                    } finally {
+                        // Clean up downloaded files
+                        sh 'rm -f minikube-linux-amd64 kubectl'
+                    }
                 }
             }
         }
+
 
         stage('Build Maven') {
             steps {
