@@ -3,9 +3,9 @@ pipeline {
 
     environment {
         JAVA_HOME = '/var/lib/jenkins/jdk-17'
-        PATH = "$JAVA_HOME/bin:$PATH"
+        JAVA_PATH = "$JAVA_HOME/bin:$PATH"
         MINIKUBE_HOME = "/var/jenkins_home/.minikube"
-        PATH = "/usr/local/bin:$MINIKUBE_HOME:$PATH"
+        MINIKUBE_PATH = "/usr/local/bin:$MINIKUBE_HOME:$PATH"
         KUBE_CONFIG = "$MINIKUBE_HOME/.kube/config"
         KUBERNETES_NAMESPACE = 'default'  // Kubernetes namespace
         KUBERNETES_CLOUD = 'my-k8s-cloud'  // Kubernetes cloud name in Jenkins
@@ -50,10 +50,6 @@ pipeline {
 
         stage('Build Maven') {
             steps {
-                script {
-                    env.JAVA_HOME = '/var/lib/jenkins/jdk-17'
-                    env.PATH = "$JAVA_HOME/bin:$PATH"
-                }
                 checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Iheb-khalfallah/exam-devops.git']])
                 sh 'mvn clean install -U'
             }
