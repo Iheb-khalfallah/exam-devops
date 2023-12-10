@@ -135,7 +135,7 @@ pipeline {
                     sh 'kubectl config use-context minikube'
         
                     // Create first a Kubernetes deployment
-                    sh 'kubectl create deployment my-app --image=nginx --port=70'
+                    sh 'kubectl create deployment my-deployed-app --image=nginx --port=70'
 
                     // Run it
                     //sh 'kubectl run deployment my-deployed-app --image=nginx --port=70'
