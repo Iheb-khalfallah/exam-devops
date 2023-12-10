@@ -29,7 +29,7 @@ pipeline {
             //}
         //}
         
-        stage('Install Minikube and Kubectl') {
+        stage('Install/Start Minikube and Install Kubectl') {
             steps {
                 script {
                     //try {
