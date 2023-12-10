@@ -4,7 +4,7 @@ pipeline {
     environment {
         JAVA_HOME = '/var/lib/jenkins/jdk-17'
         JAVA_PATH = "$JAVA_HOME/bin:$PATH"
-        MINIKUBE_HOME = "/var/jenkins_home/.minikube"
+        MINIKUBE_HOME = "/var/lib/jenkins/.minikube"
         MINIKUBE_PATH = "/usr/local/bin:$MINIKUBE_HOME:$PATH"
         KUBE_CONFIG = "$MINIKUBE_HOME/.kube/config"
         KUBERNETES_NAMESPACE = 'default'  // Kubernetes namespace
@@ -127,10 +127,10 @@ pipeline {
             }
         }
 
-        stage('Configure Kubernetes in Jenkins') {
+        stage('Configure Kubernetes in ') {
             steps {
                 script {
-                    // Assuming that Minikube is running on the Jenkins agent
+                    // Assuming that Minikube is running on the  agent
                     sh 'cp $MINIKUBE_HOME/.kube/config $KUBE_CONFIG'
                 }
             }
