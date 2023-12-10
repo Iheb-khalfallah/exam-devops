@@ -11,6 +11,7 @@ pipeline {
         SONARQUBE_HOME = "/var/lib/jenkins/sonar-scanner"
         SONARQUBE_PATH = "$SONARQUBE_HOME/bin:$PATH"
         SONARQUBE_SCANNER_VERSION = '4.6.0.2311'
+        SONARQUBE_SERVER = 'SONARQUBE' 
         
         KUBE_CONFIG = "$MINIKUBE_HOME/.kube/config"
         KUBERNETES_NAMESPACE = 'default'  // Kubernetes namespace
