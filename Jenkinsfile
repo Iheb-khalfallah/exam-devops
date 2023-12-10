@@ -208,11 +208,11 @@ pipeline {
 
     post {
         success {
-            echo 'Build, tests, and Docker image creation, push, and pull passed.'
+            echo 'Build, tests, and Docker image creation, push, pull and deployment passed.'
         }
 
         failure {
-            echo 'Build, tests, or Docker image creation, push, and pull failed.'
+            echo 'Build, tests, or Docker image creation, push, pull and deployment failed.'
         }
 
         //always {
