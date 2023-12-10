@@ -65,13 +65,21 @@ pipeline {
         stage('Uninstall SonarQube') {
             steps {
                 script {
-                    sh 'sudo systemctl stop sonarqube'
+                    // Stop SonarQube if it's running using Docker Compose
+                    sh 'docker-compose down'
+        
+                    // Remove SonarQube directory (if it exists)
                     sh 'sudo rm -rf /opt/sonarqube'
+        
+                    // Remove systemd service (if it exists)
                     sh 'sudo rm /etc/systemd/system/sonarqube.service'
+        
+                    // Remove SonarQube user (if created)
                     sh 'sudo userdel sonarqube'
                 }
             }
         }
+
         
         stage('Build Maven') {
             steps {
