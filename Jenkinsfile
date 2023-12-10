@@ -38,7 +38,7 @@ pipeline {
                         // Make it executable
                         sh 'chmod +x minikube-linux-amd64'
                         // Move it to /usr/local/bin/ 
-                        sh 'sudo -S mv minikube-linux-amd64 /usr/local/bin/minikube'
+                        sh 'echo Iheb123 | sudo -S mv minikube-linux-amd64 /usr/local/bin/minikube'
                         
                         // Start Minikube
                         sh 'minikube start'
@@ -46,7 +46,7 @@ pipeline {
                         // Install kubectl
                         sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
                         sh 'chmod +x kubectl'
-                        sh 'sudo -S mv kubectl /usr/local/bin/kubectl'
+                        sh 'echo Iheb123 | sudo -S mv kubectl /usr/local/bin/kubectl'
                         
                     } catch (Exception e) {
                         currentBuild.result = 'FAILURE'
