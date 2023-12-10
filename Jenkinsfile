@@ -152,7 +152,10 @@ pipeline {
                     def minikubeIP = sh(script: 'minikube ip', returnStdout: true).trim()
                     // Get the NodePort assigned
                     def nodePort = sh(script: 'kubectl get svc my-deployed-app -o=jsonpath="{.spec.ports[0].nodePort}"', returnStdout: true).trim()
-        
+
+                    sh 'kubectl describe deployment my-deployed-app'
+                    sh 'kubectl describe svc my-deployed-app'
+
                     // Access the application using the Minikube IP and NodePort
                     echo "Your application is accessible at: http://${minikubeIP}:${nodePort}"
                 }
