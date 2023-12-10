@@ -8,9 +8,7 @@ pipeline {
         MINIKUBE_HOME = "/var/lib/jenkins/.minikube"
         MINIKUBE_PATH = "/usr/local/bin:$MINIKUBE_HOME:$PATH"
 
-        //SONARQUBE_HOME = "/var/lib/jenkins/sonar-scanner"
-        //SONARQUBE_PATH = "$SONARQUBE_HOME/bin:$PATH"
-        //SONARQUBE_SCANNER_VERSION = '4.6.0.2311'
+        SONAR_TOKEN = credentials('SONARQUBE_TOKEN')
         
         KUBE_CONFIG = "$MINIKUBE_HOME/.kube/config"
         KUBERNETES_NAMESPACE = 'default'  // Kubernetes namespace
@@ -20,7 +18,6 @@ pipeline {
     tools {
         maven 'maven'
         dockerTool 'docker'
-        //sonarqubeScanner 'SonarQubeScanner'
     }
 
     stages {
@@ -66,19 +63,24 @@ pipeline {
             }
         }
 
-        //stage('Install SonarQube Scanner') {
-            //steps {
-                //script {
-                    // Download and install SonarQube Scanner
-                    //sh "curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONARQUBE_SCANNER_VERSION}-linux.zip"
-                    //sh 'unzip sonar-scanner.zip'
-                    //sh 'rm sonar-scanner.zip'
-                    //sh 'mv sonar-scanner-* $SONARQUBE_HOME'
-                //}
-            //}
-        //}
+        stage('Uninstall SonarQube') {
+            steps {
+                script {
+                    // Stop SonarQube if it's running
+                    sh 'sudo systemctl stop sonarqube'
 
+                    // Remove SonarQube directory
+                    sh 'sudo rm -rf /opt/sonarqube'
 
+                    // Remove systemd service
+                    sh 'sudo rm /etc/systemd/system/sonarqube.service'
+
+                    // Remove SonarQube user (if created)
+                    sh 'sudo userdel sonarqube'
+                }
+            }
+        }
+        
         stage('Build Maven') {
             steps {
                 checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Iheb-khalfallah/exam-devops.git']])
