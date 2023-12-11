@@ -124,7 +124,7 @@ pipeline {
             steps {
                 script {
                     // Deploy the Docker Compose environment
-                    sh 'docker-compose down'
+                    sh 'docker-compose down --remove-orphans'
                     sh 'docker-compose up -d'
                 }
             }
