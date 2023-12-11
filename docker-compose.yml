@@ -15,7 +15,3 @@ services:
     ports:
       - "27017:27017"
 
-  mongo-demo-db-service:
-    image: mongo:latest
-    ports:
-      - "27017:27017"
