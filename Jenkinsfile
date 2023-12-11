@@ -62,7 +62,7 @@ pipeline {
         stage('Install/Start Minikube and Install Kubectl') {
             steps {
                 script {
-                    try {
+                    //try {
                         // Download Minikube binary
                         //sh 'curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64'
                         // Make it executable
