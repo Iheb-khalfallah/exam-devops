@@ -59,9 +59,9 @@ pipeline {
         //}
 
         
-        stage('Install/Start Minikube and Install Kubectl') {
-            steps {
-                script {
+        //stage('Install/Start Minikube and Install Kubectl') {
+            //steps {
+                //script {
                     //try {
                         // Download Minikube binary
                         //sh 'curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64'
@@ -70,8 +70,8 @@ pipeline {
                         // Move it to /usr/local/bin/ 
                         //sh 'echo Iheb123 | sudo -S mv minikube-linux-amd64 /usr/local/bin/minikube'
   
-                    // Start Minikube
-                    sh 'minikube start'
+                        // Start Minikube
+                        //sh 'minikube start'
                     
                         // Install kubectl
                         //sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
@@ -85,9 +85,9 @@ pipeline {
                         // Clean up downloaded files
                         //sh 'rm -f minikube-linux-amd64 kubectl'
                     //}
-                }
-            }
-        }
+                //}
+            //}
+        //}
  
         stage('Build Maven') {
             steps {
@@ -160,35 +160,61 @@ pipeline {
         stage('Build and Deploy to Kubernetes') {
             steps {
                 script {
-                    // Build and deploy your application using kubectl
-                    sh 'kubectl config use-context minikube'
-                    
-                    // Delete the existing deployment if it exists
-                    sh 'kubectl delete deployment my-deployed-app --ignore-not-found=true'
-                    sh 'kubectl delete service my-deployed-app --ignore-not-found=true'
-                    
-                    // Create first a Kubernetes deployment
-                    sh 'kubectl create deployment my-deployed-app --image=nginx:latest --port=70'
-
-
-                    // Expose the deployment
-                    sh 'kubectl expose deployment my-deployed-app --type=NodePort --port=70'
-
-                     //Get the Minikube IP
+                    def deploymentYaml = '''
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: my-deployed-app
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              app: my-deployed-app
+          template:
+            metadata:
+              labels:
+                app: my-deployed-app
+            spec:
+              containers:
+              - name: nginx
+                image: nginx:latest
+                ports:
+                - containerPort: 70
+        ---
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: my-deployed-app
+        spec:
+          selector:
+            app: my-deployed-app
+          ports:
+          - protocol: TCP
+            port: 70
+            targetPort: 70
+          type: NodePort
+        '''
+        
+                    // Apply the deployment and service
+                    sh "echo '${deploymentYaml}' | kubectl apply -f -"
+        
+                    // Get the Minikube IP
                     def minikubeIP = sh(script: 'minikube ip', returnStdout: true).trim()
-                     //Get the NodePort assigned
+        
+                    // Get the NodePort assigned
                     def nodePort = sh(script: 'kubectl get svc my-deployed-app -o=jsonpath="{.spec.ports[0].nodePort}"', returnStdout: true).trim()
-
+        
                     // Access the application using the Minikube IP and NodePort
                     echo "Your application is accessible at: http://${minikubeIP}:${nodePort}"
-                    
+        
+                    // Describe the deployment, replicaset, and pods
                     sh 'kubectl describe deployment my-deployed-app'
-                    sh 'kubectl describe replicaset my-deployed-app-84f9f4df5f'
+                    //sh 'kubectl describe replicaset my-deployed-app-'
                     sh 'kubectl describe pods'
-
                 }
             }
         }
+
 
 
 
