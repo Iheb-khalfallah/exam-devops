@@ -161,42 +161,42 @@ pipeline {
             steps {
                 script {
                     def deploymentYaml = '''
-        apiVersion: apps/v1
-        kind: Deployment
-        metadata:
-          name: my-deployed-app
-        spec:
-          replicas: 1
-          selector:
-            matchLabels:
-              app: my-deployed-app
-          template:
-            metadata:
-              labels:
-                app: my-deployed-app
-            spec:
-              containers:
-              - name: nginx
-                image: nginx:latest
-                ports:
-                - containerPort: 70
-        ---
-        apiVersion: v1
-        kind: Service
-        metadata:
-          name: my-deployed-app
-        spec:
-          selector:
-            app: my-deployed-app
-          ports:
-          - protocol: TCP
-            port: 70
-            targetPort: 70
-          type: NodePort
-        '''
-        
+                    apiVersion: apps/v1
+                    kind: Deployment
+                    metadata:
+                      name: my-deployed-app
+                    spec:
+                      replicas: 1
+                      selector:
+                        matchLabels:
+                          app: my-deployed-app
+                      template:
+                        metadata:
+                          labels:
+                            app: my-deployed-app
+                        spec:
+                          containers:
+                          - name: nginx
+                            image: nginx:latest
+                            ports:
+                            - containerPort: 70
+                    ---
+                    apiVersion: v1
+                    kind: Service
+                    metadata:
+                      name: my-deployed-app
+                    spec:
+                      selector:
+                        app: my-deployed-app
+                      ports:
+                      - protocol: TCP
+                        port: 70
+                        targetPort: 70
+                      type: NodePort
+                    '''
+                    
                     // Apply the deployment and service
-                    sh "echo '${deploymentYaml}' | kubectl apply -f -"
+                    sh(script: "echo '${deploymentYaml}' | kubectl apply -f -")
         
                     // Get the Minikube IP
                     def minikubeIP = sh(script: 'minikube ip', returnStdout: true).trim()
