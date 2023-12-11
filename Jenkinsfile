@@ -131,46 +131,34 @@ pipeline {
         }
 
 
-       // stage('Build and Deploy to Kubernetes') {
-           // steps {
-               // script {
+        stage('Build and Deploy to Kubernetes') {
+            steps {
+                script {
                     // Build and deploy your application using kubectl
-                   // sh 'kubectl config use-context minikube'
+                    sh 'kubectl config use-context minikube'
                     
                     // Delete the existing deployment if it exists
-                   // sh 'kubectl delete deployment my-deployed-app --ignore-not-found=true'
-                   // sh 'kubectl delete service my-deployed-app --ignore-not-found=true'
+                    sh 'kubectl delete deployment my-deployed-app --ignore-not-found=true'
+                    sh 'kubectl delete service my-deployed-app --ignore-not-found=true'
                     
                     // Create first a Kubernetes deployment
-                   // sh 'kubectl create deployment my-deployed-app --image=nginx:latest --port=70'
+                    sh 'kubectl create deployment my-deployed-app --image=nginx:latest --port=70'
 
 
                     // Expose the deployment
-                   // sh 'kubectl expose deployment my-deployed-app --type=NodePort --port=70'
+                    sh 'kubectl expose deployment my-deployed-app --type=NodePort --port=70'
 
-                    // Get the Minikube IP
-                   // def minikubeIP = sh(script: 'minikube ip', returnStdout: true).trim()
-                    // Get the NodePort assigned
-                   // def nodePort = sh(script: 'kubectl get svc my-deployed-app -o=jsonpath="{.spec.ports[0].nodePort}"', returnStdout: true).trim()
+                     Get the Minikube IP
+                    def minikubeIP = sh(script: 'minikube ip', returnStdout: true).trim()
+                     Get the NodePort assigned
+                    def nodePort = sh(script: 'kubectl get svc my-deployed-app -o=jsonpath="{.spec.ports[0].nodePort}"', returnStdout: true).trim()
 
                     // Access the application using the Minikube IP and NodePort
-                   // echo "Your application is accessible at: http://${minikubeIP}:${nodePort}"
-               // }
-            //}
-        //}
-
-
-        stage('Deploy') {
-            steps {
-                sh 'minikube cache add ihebkhalfallah/mongo-demo:1'
-                sh 'minikube cache reload'
-                sh 'kubectl apply -f docker-compose.yml'
-                sh 'kubectl apply -f docker-compose.yml'
-                sh 'kubectl apply -f docker-compose.yml'
-                sh 'kubectl apply -f docker-compose.yml'
-
+                    echo "Your application is accessible at: http://${minikubeIP}:${nodePort}"
+                }
             }
         }
+
 
 
         stage('SonarQube Analysis') {
