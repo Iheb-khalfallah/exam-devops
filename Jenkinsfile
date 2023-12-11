@@ -36,17 +36,24 @@ pipeline {
         stage('Install Nginx') {
             steps {
                 script {
-                    // Configure sudoers to allow specific commands without password prompt
-                    sh 'echo "$(whoami) ALL=(ALL) NOPASSWD: /usr/bin/zypper, /usr/bin/systemctl" | sudo tee -a /etc/sudoers.d/jenkins'
+                    // Create a temporary sudoers file
+                    def sudoersFile = '/tmp/jenkins_sudoers'
+                    sh 'echo "jenkins ALL=(ALL) NOPASSWD: /usr/bin/zypper, /usr/bin/systemctl" > ' + sudoersFile
+        
+                    // Copy the temporary sudoers file to /etc/sudoers.d/
+                    sh 'echo Iheb123 | sudo -S cp ' + sudoersFile + ' /etc/sudoers.d/jenkins'
+        
+                    // Remove the temporary sudoers file
+                    sh 'rm ' + sudoersFile
         
                     // Update and install Nginx
-                    sh 'sudo zypper update --non-interactive && sudo zypper install -y --non-interactive nginx'
+                    sh 'echo Iheb123 | sudo -S zypper update --non-interactive && sudo zypper install -y --non-interactive nginx'
         
                     // Start Nginx
-                    sh 'sudo systemctl start nginx'
+                    sh 'echo Iheb123 | sudo -S systemctl start nginx'
         
                     // Enable Nginx to start on boot
-                    sh 'sudo systemctl enable nginx'
+                    sh 'echo Iheb123 | sudo -S systemctl enable nginx'
                 }
             }
         }
