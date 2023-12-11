@@ -159,11 +159,7 @@ pipeline {
         stage('Build and Deploy to Kubernetes') {
             steps {
                 script {
-                    // Check if Minikube is running
-                    def minikubeStatus = sh(script: 'minikube status --format "{{.MinikubeStatus}} 2>&1"', returnStatus: true).trim()
-        
-                    if (minikubeStatus == 'Running') {
-                        def deploymentYaml = '''
+                    def deploymentYaml = '''
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -198,25 +194,23 @@ spec:
   type: NodePort
 '''
         
-                        // Apply the deployment and service
-                        sh(script: "echo '''${deploymentYaml}''' | kubectl apply -f -")
-        
-                        // Get the Minikube IP
-                        def minikubeIP = sh(script: 'minikube ip', returnStdout: true).trim()
-        
-                        // Get the NodePort assigned
-                        def nodePort = sh(script: 'kubectl get svc my-deployed-app -o=jsonpath="{.spec.ports[0].nodePort}"', returnStdout: true).trim()
-        
-                        // Access the application using the Minikube IP and NodePort
-                        echo "Your application is accessible at: http://${minikubeIP}:${nodePort}"
-        
-                        // Describe the deployment, replicaset, and pods
-                        sh 'kubectl describe deployment my-deployed-app'
-                        //sh 'kubectl describe replicaset my-deployed-app-'
-                        sh 'kubectl describe pods'
-                    } else {
-                        error("Minikube is not running. Please start Minikube before running this script.")
-                    }
+                    // Apply the deployment and service
+                    sh(script: "echo '''${deploymentYaml}''' | kubectl apply -f -")
+    
+                    // Get the Minikube IP
+                    def minikubeIP = sh(script: 'minikube ip', returnStdout: true).trim()
+    
+                    // Get the NodePort assigned
+                    def nodePort = sh(script: 'kubectl get svc my-deployed-app -o=jsonpath="{.spec.ports[0].nodePort}"', returnStdout: true).trim()
+    
+                    // Access the application using the Minikube IP and NodePort
+                    echo "Your application is accessible at: http://${minikubeIP}:${nodePort}"
+    
+                    // Describe the deployment, replicaset, and pods
+                    sh 'kubectl describe deployment my-deployed-app'
+                    //sh 'kubectl describe replicaset my-deployed-app-'
+                    sh 'kubectl describe pods'
+
                 }
             }
         }
