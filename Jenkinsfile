@@ -45,7 +45,7 @@ pipeline {
                         //sh 'echo Iheb123 | sudo -S mv minikube-linux-amd64 /usr/local/bin/minikube'
                         //sh 'docker pull nginx'    
                     // Start Minikube
-                    sh 'minikube start '
+                    sh 'minikube start'
                         
                         // Install kubectl
                         //sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
@@ -89,14 +89,14 @@ pipeline {
             }
         }
 
-        stage('Build Image') {
-            steps {
-                script {
+        //stage('Build Image') {
+            //steps {
+                //script {
                     // Build the Docker image
-                    docker.build("ihebkhalfallah/mongo-demo:1")
-                }
-            }
-        }
+                    //docker.build("ihebkhalfallah/mongo-demo:1")
+                //}
+            //}
+        //}
 
         //stage('Push') {
             //steps {
@@ -124,7 +124,7 @@ pipeline {
             steps {
                 script {
                     // Deploy the Docker Compose environment
-                    sh 'docker-compose down --remove-orphans'
+                    sh 'docker-compose down'
                     sh 'docker-compose up -d'
                 }
             }
