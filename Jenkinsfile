@@ -33,30 +33,30 @@ pipeline {
             //}
         //}
 
-        stage('Install Nginx') {
-            steps {
-                script {
+        //stage('Install Nginx') {
+            //steps {
+                //script {
                     // Create a temporary sudoers file
-                    def sudoersFile = '/tmp/jenkins_sudoers'
-                    sh 'echo "jenkins ALL=(ALL) NOPASSWD: /usr/bin/zypper, /usr/bin/systemctl" > ' + sudoersFile
+                    //def sudoersFile = '/tmp/jenkins_sudoers'
+                    //sh 'echo "jenkins ALL=(ALL) NOPASSWD: /usr/bin/zypper, /usr/bin/systemctl" > ' + sudoersFile
         
                     // Copy the temporary sudoers file to /etc/sudoers.d/
-                    sh 'echo Iheb123 | sudo -S cp ' + sudoersFile + ' /etc/sudoers.d/jenkins'
+                    //sh 'echo Iheb123 | sudo -S cp ' + sudoersFile + ' /etc/sudoers.d/jenkins'
         
                     // Remove the temporary sudoers file
-                    sh 'rm ' + sudoersFile
+                    //sh 'rm ' + sudoersFile
         
                     // Update and install Nginx (non-interactive)
-                    sh 'echo Iheb123 | sudo -S zypper --non-interactive --no-gpg-checks install -y nginx'
+                    //sh 'echo Iheb123 | sudo -S zypper --non-interactive --no-gpg-checks install -y nginx'
         
                     // Start Nginx
-                    sh 'echo Iheb123 | sudo -S systemctl start nginx'
+                   //sh 'echo Iheb123 | sudo -S systemctl start nginx'
         
                     // Enable Nginx to start on boot
-                    sh 'echo Iheb123 | sudo -S systemctl enable nginx'
-                }
-            }
-        }
+                    //sh 'echo Iheb123 | sudo -S systemctl enable nginx'
+                //}
+            //}
+        //}
 
         
         stage('Install/Start Minikube and Install Kubectl') {
