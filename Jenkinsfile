@@ -71,6 +71,7 @@ pipeline {
                         //sh 'echo Iheb123 | sudo -S mv minikube-linux-amd64 /usr/local/bin/minikube'
   
                     // Start Minikube
+                    export NO_PROXY=localhost,127.0.0.1,10.96.0.0/12,192.168.59.0/24,192.168.49.0/24,192.168.39.0/24
                     sh 'minikube start'
                     sh 'minikube status'
                     
