@@ -159,10 +159,10 @@ pipeline {
         stage('Build and Deploy to Kubernetes') {
             steps {
                 script {
-                   // Check if Minikube is running
-                    def minikubeStatus = sh(script: 'minikube status --format "{{.MinikubeStatus}}"', returnStatus: true)
+                    // Check if Minikube is running
+                    def minikubeStatus = sh(script: 'minikube status --format "{{.MinikubeStatus}} 2>&1"', returnStatus: true).trim()
         
-                    if (minikubeStatus == 0) {
+                    if (minikubeStatus == 'Running') {
                         def deploymentYaml = '''
 apiVersion: apps/v1
 kind: Deployment
