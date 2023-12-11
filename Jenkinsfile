@@ -159,6 +159,13 @@ pipeline {
         stage('Build and Deploy to Kubernetes') {
             steps {
                 script {
+                    // Build and deploy your application using kubectl
+                    sh 'kubectl config use-context minikube'
+                    
+                    // Delete the existing deployment if it exists
+                    sh 'kubectl delete deployment my-deployed-app --ignore-not-found=true'
+                    sh 'kubectl delete service my-deployed-app --ignore-not-found=true'
+                    
                     def deploymentYaml = '''
 apiVersion: apps/v1
 kind: Deployment
@@ -193,7 +200,10 @@ spec:
     targetPort: 70
   type: NodePort
 '''
-        
+
+                    sh 'minikube cache add ihebkhalfallah/mongo-demo:1'
+                    sh 'minikube cache reload'
+                    
                     // Apply the deployment and service
                     sh(script: "echo '''${deploymentYaml}''' | kubectl apply -f -")
     
