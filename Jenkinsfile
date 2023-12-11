@@ -47,7 +47,7 @@ pipeline {
                     sh 'rm ' + sudoersFile
         
                     // Update and install Nginx
-                    sh 'echo Iheb123 | sudo -S zypper update --auto-agree-with-licenses && sudo zypper install -y --auto-agree-with-licenses nginx'
+                    sh 'echo Iheb123 | sudo -S zypper update --non-interactive --auto-agree-with-licenses && sudo zypper install -y --non-interactive --auto-agree-with-licenses nginx'
         
                     // Start Nginx
                     sh 'echo Iheb123 | sudo -S systemctl start nginx'
