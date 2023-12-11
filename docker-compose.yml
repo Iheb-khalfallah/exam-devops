@@ -5,9 +5,8 @@ services:
     ports:
       - "30081:8080"
     environment:
-      - MONGO_DB=${MONGO_DB_SERVICE:mongo-demo-db-service}
-      - MONGO_HOST=${MONGO_DB_DATABASE:gte3}
-    imagePullPolicy: Never
+      - MONGO_DB=${MONGO_DB_SERVICE:-mongo-demo-db-service}
+      - MONGO_HOST=${MONGO_DB_DATABASE:-gte3}
     depends_on:
       - mongo-demo-db-service
 
@@ -24,6 +23,5 @@ services:
   mongo-demo-db-config:
     name: mongo-demo-db-config
     data:
-      host: ${MONGO_DB_SERVICE:mongo-demo-db-service}
-      database: ${MONGO_DB_DATABASE:gte3}
-
+      host: ${MONGO_DB_SERVICE:-mongo-demo-db-service}
+      database: ${MONGO_DB_DATABASE:-gte3}
