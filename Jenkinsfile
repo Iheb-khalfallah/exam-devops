@@ -162,7 +162,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sh 'minikube cache add alidaoud/mongo-demo:latest'
+                sh 'minikube cache add ihebkhalfallah/mongo-demo:1'
                 sh 'minikube cache reload'
                 sh 'kubectl apply -f docker-compose.yml'
                 sh 'kubectl apply -f docker-compose.yml'
