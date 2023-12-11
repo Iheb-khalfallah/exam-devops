@@ -32,6 +32,21 @@ pipeline {
                 //}
             //}
         //}
+
+        stage('Install Nginx') {
+            steps {
+                script {
+                    // Install Nginx
+                    sh 'echo Iheb123 | sudo -S apt update && sudo apt install -y nginx'
+                    
+                    // Start Nginx
+                    sh 'echo Iheb123 | sudo -S systemctl start nginx'
+                    
+                    // Enable Nginx to start on boot
+                    sh 'echo Iheb123 | sudo -S systemctl enable nginx'
+                }
+            }
+        }
         
         stage('Install/Start Minikube and Install Kubectl') {
             steps {
