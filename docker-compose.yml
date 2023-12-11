@@ -19,9 +19,3 @@ services:
     image: mongo:latest
     ports:
       - "27017:27017"
-
-  mongo-demo-db-config:
-    name: mongo-demo-db-config
-    data:
-      host: ${MONGO_DB_SERVICE:-mongo-demo-db-service}
-      database: ${MONGO_DB_DATABASE:-gte3}
