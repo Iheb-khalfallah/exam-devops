@@ -89,25 +89,25 @@ pipeline {
             }
         }
 
-        //stage('Build Image') {
-            //steps {
-                //script {
+        stage('Build Image') {
+            steps {
+                script {
                     // Build the Docker image
-                    //docker.build("ihebkhalfallah/mongo-demo:1")
-                //}
-            //}
-        //}
+                    docker.build("ihebkhalfallah/mongo-demo:1")
+                }
+            }
+        }
 
-        //stage('Push') {
-            //steps {
-                //script {
+        stage('Push') {
+            steps {
+                script {
                     // Push the Docker image
-                    //docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
-                        //docker.image("ihebkhalfallah/mongo-demo:1").push()
-                    //}
-                //}
-            //}
-        //}
+                    docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
+                        docker.image("ihebkhalfallah/mongo-demo:1").push()
+                    }
+                }
+            }
+        }
 
         //stage('Pull'){
             //steps{
