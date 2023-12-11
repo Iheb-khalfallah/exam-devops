@@ -36,14 +36,17 @@ pipeline {
         stage('Install Nginx') {
             steps {
                 script {
-                    // Install Nginx
-                    sh 'echo Iheb123 | sudo -S zypper update && sudo zypper install -y --non-interactive nginx'
-                    
+                    // Configure sudoers to allow specific commands without password prompt
+                    sh 'echo "$(whoami) ALL=(ALL) NOPASSWD: /usr/bin/zypper, /usr/bin/systemctl" | sudo tee -a /etc/sudoers.d/jenkins'
+        
+                    // Update and install Nginx
+                    sh 'sudo zypper update --non-interactive && sudo zypper install -y --non-interactive nginx'
+        
                     // Start Nginx
-                    sh 'echo Iheb123 | sudo -S systemctl start nginx'
-                    
+                    sh 'sudo systemctl start nginx'
+        
                     // Enable Nginx to start on boot
-                    sh 'echo Iheb123 | sudo -S systemctl enable nginx'
+                    sh 'sudo systemctl enable nginx'
                 }
             }
         }
