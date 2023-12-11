@@ -155,6 +155,8 @@ pipeline {
 
                     // Access the application using the Minikube IP and NodePort
                     echo "Your application is accessible at: http://${minikubeIP}:${nodePort}"
+                    
+                    sh 'kubectl describe deployment my-deployed-app'
                 }
             }
         }
