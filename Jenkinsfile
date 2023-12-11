@@ -43,7 +43,7 @@ pipeline {
                         //sh 'chmod +x minikube-linux-amd64'
                         // Move it to /usr/local/bin/ 
                         //sh 'echo Iheb123 | sudo -S mv minikube-linux-amd64 /usr/local/bin/minikube'
-                    sh 'docker pull nginx'    
+                        //sh 'docker pull nginx'    
                     // Start Minikube
                     sh 'minikube start '
                         
