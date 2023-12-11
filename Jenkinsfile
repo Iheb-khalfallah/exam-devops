@@ -46,7 +46,14 @@ pipeline {
   
                     // Start Minikube
                     sh 'minikube start'
-                    sh 'minikube ssh "docker pull nginx:latest"'
+                    // Pull nginx image inside Minikube
+                    try {
+                        sh 'minikube ssh "docker pull nginx:latest"'
+                    } catch (Exception e) {
+                        // Handle the error, print the stack trace, and continue if necessary
+                        echo "Error: ${e.message}"
+                        // You may want to add more specific error handling here
+                    }
                     
                         // Install kubectl
                         //sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
