@@ -157,6 +157,9 @@ pipeline {
                     echo "Your application is accessible at: http://${minikubeIP}:${nodePort}"
                     
                     sh 'kubectl describe deployment my-deployed-app'
+                    sh 'kubectl describe replicaset my-deployed-app-84f9f4df5f'
+                    sh 'kubectl describe pods'
+
                 }
             }
         }
