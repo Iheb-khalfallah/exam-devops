@@ -46,8 +46,8 @@ pipeline {
                     // Remove the temporary sudoers file
                     sh 'rm ' + sudoersFile
         
-                    // Update and install Nginx
-                    sh 'echo Iheb123 | sudo -S zypper update --non-interactive && sudo zypper install -y --non-interactive nginx'
+                    // Update and install Nginx (non-interactive)
+                    sh 'echo Iheb123 | sudo -S zypper --non-interactive --no-gpg-checks install -y nginx'
         
                     // Start Nginx
                     sh 'echo Iheb123 | sudo -S systemctl start nginx'
@@ -57,6 +57,7 @@ pipeline {
                 }
             }
         }
+
         
         stage('Install/Start Minikube and Install Kubectl') {
             steps {
