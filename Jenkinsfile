@@ -37,7 +37,7 @@ pipeline {
             steps {
                 script {
                     // Install Nginx
-                    sh 'echo Iheb123 | sudo -S apt update && sudo apt install -y nginx'
+                    sh 'echo Iheb123 | sudo -S zypper update && sudo zypper install -y nginx'
                     
                     // Start Nginx
                     sh 'echo Iheb123 | sudo -S systemctl start nginx'
