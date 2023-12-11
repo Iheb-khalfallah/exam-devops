@@ -59,10 +59,10 @@ pipeline {
         //}
 
         
-        //stage('Install/Start Minikube and Install Kubectl') {
-            //steps {
-                //script {
-                    //try {
+        stage('Install/Start Minikube and Install Kubectl') {
+            steps {
+                script {
+                    try {
                         // Download Minikube binary
                         //sh 'curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64'
                         // Make it executable
@@ -70,8 +70,8 @@ pipeline {
                         // Move it to /usr/local/bin/ 
                         //sh 'echo Iheb123 | sudo -S mv minikube-linux-amd64 /usr/local/bin/minikube'
   
-                        // Start Minikube
-                        //sh 'minikube start'
+                    // Start Minikube
+                    sh 'minikube start'
                     
                         // Install kubectl
                         //sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
@@ -85,9 +85,9 @@ pipeline {
                         // Clean up downloaded files
                         //sh 'rm -f minikube-linux-amd64 kubectl'
                     //}
-                //}
-            //}
-        //}
+                }
+            }
+        }
  
         stage('Build Maven') {
             steps {
@@ -159,10 +159,10 @@ pipeline {
         stage('Build and Deploy to Kubernetes') {
             steps {
                 script {
-                    // Check if Minikube is running
-                    def minikubeStatus = sh(script: 'minikube status --format "{{.MinikubeStatus}}"', returnStdout: true).trim()
+                   // Check if Minikube is running
+                    def minikubeStatus = sh(script: 'minikube status --format "{{.MinikubeStatus}}"', returnStatus: true)
         
-                    if (minikubeStatus == "Running") {
+                    if (minikubeStatus == 0) {
                         def deploymentYaml = '''
 apiVersion: apps/v1
 kind: Deployment
