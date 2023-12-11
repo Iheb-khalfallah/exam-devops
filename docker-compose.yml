@@ -1,21 +1,28 @@
 version: '3'
+
 services:
-  mongo-demo-app-service:
+  spring-boot-app:
     image: ihebkhalfallah/mongo-demo:1
     ports:
-      - "30081:8080"
-    environment:
-      - MONGO_DB_SERVICE=mongo-demo-db-service
-      - MONGO_DB_DATABASE=gte3
+      - "9090:9090"
     depends_on:
-      - mongo-demo-db-service
+      - mongo-service
+    environment:
+      SPRING_DATA_MONGODB_URI: "mongodb://mongo:27017/gte3"
+    networks:
+      - backend
 
-  mongo-demo-db:
-    image: mongo:latest
+  mongo:
+    image: mongo
     ports:
       - "27017:27017"
+    networks:
+      - backend
+    volumes:
+      - mongodb-data:/data/db
 
-  mongo-demo-db-service:
-    image: mongo:latest
-    ports:
-      - "27017:27017"
+volumes:
+  mongodb-data:
+
+networks:
+  backend:
