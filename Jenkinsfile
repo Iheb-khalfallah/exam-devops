@@ -93,9 +93,9 @@ pipeline {
                         // Clean up downloaded files
                    //       sh 'rm -f minikube-linux-amd64 kubectl'
                   //  }
-               // }
-           // }
-       // }
+                }
+            }
+        }
 
 
 
