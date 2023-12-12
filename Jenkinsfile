@@ -39,10 +39,13 @@ pipeline {
         stage('Download and Install OpenJDK') {
             steps {
                 script {
+                    // delete old installation
+                    sh 'rm -r jdk-17'
                     // Create the target directory in the workspace
                     sh "mkdir -p ${WORKSPACE}/jdk-17"
                     
                     // Download and install OpenJDK 17
+                    sh 'wget https://download.java.net/java/GA/jdk17/0d483333a00540d886896bac774ff48b/35/GPL/openjdk-17_linux-x64_bin.tar.gz'
                     sh 'tar -xvf openjdk-17_linux-x64_bin.tar.gz -C ${WORKSPACE}'
                     sh "chmod -R 755 ${WORKSPACE}/jdk-17"
                     
