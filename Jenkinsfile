@@ -36,23 +36,23 @@ pipeline {
             //}
         //}
         
-        stage('Download and Install OpenJDK') {
-            steps {
-                script {
+        //stage('Download and Install OpenJDK') {
+            //steps {
+                /script {
                     // Create the target directory in the workspace
-                    sh "mkdir -p ${WORKSPACE}/jdk-17"
+                    //sh "mkdir -p ${WORKSPACE}/jdk-17"
                     
                     // Download and install OpenJDK 17
-                    sh 'wget https://download.java.net/java/GA/jdk17/0d483333a00540d886896bac774ff48b/35/GPL/openjdk-17_linux-x64_bin.tar.gz'
-                    sh 'tar -xvf openjdk-17_linux-x64_bin.tar.gz -C ${WORKSPACE}'
-                    sh "chmod -R 755 ${WORKSPACE}/jdk-17"
+                   // sh 'wget https://download.java.net/java/GA/jdk17/0d483333a00540d886896bac774ff48b/35/GPL/openjdk-17_linux-x64_bin.tar.gz'
+                   // sh 'tar -xvf openjdk-17_linux-x64_bin.tar.gz -C ${WORKSPACE}'
+                   // sh "chmod -R 755 ${WORKSPACE}/jdk-17"
                     
                     // Set JAVA_HOME globally
-                    env.JAVA_HOME = "${WORKSPACE}/jdk-17"
-                    env.JAVA_PATH = "${env.JAVA_HOME}/bin:${env.JAVA_PATH}"
-                }
-            }
-        }
+                   // env.JAVA_HOME = "${WORKSPACE}/jdk-17"
+                   // env.JAVA_PATH = "${env.JAVA_HOME}/bin:${env.JAVA_PATH}"
+              //  }
+           // }
+       // }
 
 
 
@@ -140,11 +140,12 @@ pipeline {
                 script {
                     // Docker login
                     withCredentials([usernamePassword(credentialsId: 'TunisianDeveloper', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
-                         sh "docker login -u \$DOCKER_HUB_USERNAME -p \$DOCKER_HUB_PASSWORD docker.io"
+                        sh "echo \$DOCKER_HUB_PASSWORD | docker login -u \$DOCKER_HUB_USERNAME --password-stdin docker.io"
                     }
                 }
             }
         }
+
 
         stage('Build Image') {
             steps {
