@@ -163,16 +163,16 @@ pipeline {
             }
         }
 
-        stage('Pull'){
-            steps{
-                script{
+        //stage('Pull'){
+            //steps{
+                //script{
                     // Pull the Docker image
-                     docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
-                        docker.image("ihebkhalfallah/mongo-demo:1").pull()
-                    }
-                }
-            }
-        }
+                     //docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
+                        //docker.image("ihebkhalfallah/mongo-demo:1").pull()
+                    //}
+                //}
+           // }
+       // }
 
         stage('Docker Compose UP') {
             steps {
