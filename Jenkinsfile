@@ -56,9 +56,9 @@ pipeline {
 
 
 
-        stage('Install Nginx') {
-            steps {
-                script {
+        //stage('Install Nginx') {
+            //steps {
+                //script {
                     // Create a temporary sudoers file
                     //def sudoersFile = '/tmp/jenkins_sudoers'
                     //sh 'echo "jenkins ALL=(ALL) NOPASSWD: /usr/bin/zypper, /usr/bin/systemctl" > ' + sudoersFile
@@ -73,18 +73,18 @@ pipeline {
                     //sh 'echo Iheb123 | sudo -S zypper --non-interactive --no-gpg-checks install -y nginx'
         
                     // Start Nginx
-                    sh 'echo Iheb123 | sudo -S systemctl start nginx'
+                    //sh 'echo Iheb123 | sudo -S systemctl start nginx'
         
                     // Enable Nginx to start on boot
-                    sh 'echo Iheb123 | sudo -S systemctl enable nginx'
-                }
-            }
-        }
+                    //sh 'echo Iheb123 | sudo -S systemctl enable nginx'
+                //}
+            //}
+        //}
 
         
-        stage('Install/Start Minikube and Install Kubectl') {
-            steps {
-                script {
+        //stage('Install/Start Minikube and Install Kubectl') {
+            //steps {
+                //script {
                    // try {
                         // Download Minikube binary
                         //sh 'curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64'
@@ -107,9 +107,9 @@ pipeline {
                             //Clean up downloaded files
                        // sh 'rm -f minikube-linux-amd64 kubectl'
                   // }
-                }
-            }
-        }
+                //}
+            //}
+        //}
 
 
 
@@ -191,68 +191,7 @@ pipeline {
         stage('Build and Deploy to Kubernetes') {
             steps {
                 script {
-                    // Build and deploy your application using kubectl
-                    sh 'kubectl config use-context minikube'
-                    
-                    // Delete the existing deployment if it exists
-                    sh 'kubectl delete deployment my-deployed-app --ignore-not-found=true'
-                    sh 'kubectl delete service my-deployed-app --ignore-not-found=true'
-                    
-                    def deploymentYaml = '''
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: my-deployed-app
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: my-deployed-app
-  template:
-    metadata:
-      labels:
-        app: my-deployed-app
-    spec:
-      containers:
-      - name: nginx
-        image: docker.io/nginx:latest
-        ports:
-        - containerPort: 70
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: my-deployed-app
-spec:
-  selector:
-    app: my-deployed-app
-  ports:
-  - protocol: TCP
-    port: 70
-    targetPort: 70
-  type: NodePort
-'''
-
-                    sh 'minikube cache add ihebkhalfallah/mongo-demo:1'
-                    sh 'minikube cache reload'
-                    
-                    // Apply the deployment and service
-                    sh(script: "echo '''${deploymentYaml}''' | kubectl apply -f -")
-    
-                    // Get the Minikube IP
-                    def minikubeIP = sh(script: 'minikube ip', returnStdout: true).trim()
-    
-                    // Get the NodePort assigned
-                    def nodePort = sh(script: 'kubectl get svc my-deployed-app -o=jsonpath="{.spec.ports[0].nodePort}"', returnStdout: true).trim()
-    
-                    // Access the application using the Minikube IP and NodePort
-                    echo "Your application is accessible at: http://${minikubeIP}:${nodePort}"
-    
-                    // Describe the deployment, replicaset, and pods
-                    sh 'kubectl describe deployment my-deployed-app'
-                    //sh 'kubectl describe replicaset my-deployed-app-'
-                    sh 'kubectl describe pods'
-
+                    kubernetesDeploy (configs: 'deploymentservice.yaml',kubeconfigId: 'kubeconfigpwd')
                 }
             }
         }
