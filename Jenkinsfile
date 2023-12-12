@@ -101,9 +101,10 @@ pipeline {
                 script {
                     env.JAVA_HOME = "${WORKSPACE}/jdk-17"
                     env.PATH = "${env.JAVA_HOME}/bin:${env.PATH}"
+                    checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Iheb-khalfallah/exam-devops.git']]) 
+                    sh 'mvn clean install -U'
                 }
-                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Iheb-khalfallah/exam-devops.git']]) 
-                sh 'mvn clean install -U'
+
             }
         }
 
