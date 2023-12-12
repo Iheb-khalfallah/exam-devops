@@ -7,7 +7,8 @@ pipeline {
         
         MINIKUBE_HOME = "/var/lib/jenkins/.minikube"
         MINIKUBE_PATH = "/usr/local/bin:$MINIKUBE_HOME:$PATH"
-
+        
+        SONARQUBE_HOME = tool 'SonarQubeScanner'
         SONAR_TOKEN = credentials('SONARQUBE_TOKEN')
         
         KUBE_CONFIG = "$MINIKUBE_HOME/.kube/config"
