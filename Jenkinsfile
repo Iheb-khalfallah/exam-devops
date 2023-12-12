@@ -11,9 +11,6 @@ pipeline {
         SONARQUBE_HOME = tool 'SonarQubeScanner'
         SONAR_TOKEN = credentials('SONARQUBE_TOKEN')
         
-        KUBE_CONFIG = "$MINIKUBE_HOME/.kube/config"
-        KUBERNETES_NAMESPACE = 'default'  // Kubernetes namespace
-        KUBERNETES_CLOUD = 'my-k8s-cloud'  // Kubernetes cloud name in Jenkins
     }
 
     tools {
