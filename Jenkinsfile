@@ -286,12 +286,12 @@ spec:
             echo 'Build, tests, or Docker image creation, push, pull and deployment failed.'
         }
 
-        //always {
+        always {
             //Cleanup: Stop Minikube after the pipeline is done
-            //script {
-                //sh 'minikube stop'
-            //}
-        //}
+            script {
+                sh 'minikube stop'
+            }
+        }
     }
 }
 
