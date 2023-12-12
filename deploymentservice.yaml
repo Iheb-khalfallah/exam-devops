@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: spring-boot-k8s
-          image: ihebkhalfallah/mongo-demo:1  # Updated image name from Jenkins pipeline
-          imagePullPolicy: IfNotPresent
+          image: ihebkhalfallah/mongo-demo:1 
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
 
