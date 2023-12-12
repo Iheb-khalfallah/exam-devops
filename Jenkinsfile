@@ -96,6 +96,7 @@ pipeline {
                         // Clean up downloaded files
                         dir(tempDir) {
                             sh 'rm -f minikube-linux-amd64 kubectl'
+                            sh 'rm -f openjdk-17_linux-x64_bin.tar.gz'
                         }
                     }
                 }
