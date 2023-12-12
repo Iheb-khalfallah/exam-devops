@@ -41,17 +41,17 @@ pipeline {
             steps {
                 script {
                     // Create a temporary sudoers file
-                    def sudoersFile = '/tmp/jenkins_sudoers'
-                    sh 'echo "jenkins ALL=(ALL) NOPASSWD: /usr/bin/zypper, /usr/bin/systemctl" > ' + sudoersFile
+                    //def sudoersFile = '/tmp/jenkins_sudoers'
+                    //sh 'echo "jenkins ALL=(ALL) NOPASSWD: /usr/bin/zypper, /usr/bin/systemctl" > ' + sudoersFile
         
                     // Copy the temporary sudoers file to /etc/sudoers.d/
-                    sh 'echo Iheb123 | sudo -S cp ' + sudoersFile + ' /etc/sudoers.d/jenkins'
+                    //sh 'echo Iheb123 | sudo -S cp ' + sudoersFile + ' /etc/sudoers.d/jenkins'
         
                     // Remove the temporary sudoers file
-                    sh 'rm ' + sudoersFile
+                    //sh 'rm ' + sudoersFile
         
                     // Update and install Nginx (non-interactive)
-                    sh 'echo Iheb123 | sudo -S zypper --non-interactive --no-gpg-checks install -y nginx'
+                    //sh 'echo Iheb123 | sudo -S zypper --non-interactive --no-gpg-checks install -y nginx'
         
                     // Start Nginx
                    sh 'echo Iheb123 | sudo -S systemctl start nginx'
@@ -88,9 +88,7 @@ pipeline {
                         error("Failed to install Minikube and kubectl: ${e.message}")
                     } finally {
                          //Clean up downloaded files
-                        dir(tempDir) {
-                            sh 'rm -f minikube-linux-amd64 kubectl'
-                        }
+                         sh 'rm -f minikube-linux-amd64 kubectl'
                     }
                 }
             }
