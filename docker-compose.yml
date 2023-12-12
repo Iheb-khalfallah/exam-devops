@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  spring-boot-app:
+  myapp:
     image: ihebkhalfallah/mongo-demo:1
     ports:
       - "9090:9090"
