@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: myapp
-          image: ihebkhalfallah/mongo-demo:1
+          image: registry.hub.docker.com/ihebkhalfallah/mongo-demo:1
           ports:
             - containerPort: 8090
         - name: mongo
