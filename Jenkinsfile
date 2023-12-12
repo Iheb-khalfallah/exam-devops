@@ -24,17 +24,17 @@ pipeline {
     stages {
 
         
-        stage('Clean Up') {
-            steps {
-                script {
+        //stage('Clean Up') {
+            //steps {
+                //script {
                     // Clean up Docker images and containers
-                    sh 'docker system prune -a --volumes -f'
+                    //sh 'docker system prune -a --volumes -f'
 
                     // Clean up Jenkins workspace
-                    cleanWs()
-                }
-            }
-        }
+                    //cleanWs()
+                //}
+            //}
+        //}
 
         stage('Download and Install OpenJDK') {
             steps {
@@ -116,7 +116,7 @@ pipeline {
         stage('Build Maven') {
             steps {
                 script {
-                    env.JAVA_HOME = '/var/lib/jenkins/jdk-17'
+                    env.JAVA_HOME = '${WORKSPACE}/jdk-17'
                     env.JAVA_PATH = "$JAVA_HOME/bin:$PATH"
                 }
                     checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Iheb-khalfallah/exam-devops.git']]) 
