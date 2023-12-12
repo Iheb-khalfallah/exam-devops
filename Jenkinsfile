@@ -87,7 +87,7 @@ pipeline {
                         currentBuild.result = 'FAILURE'
                         error("Failed to install Minikube and kubectl: ${e.message}")
                     } finally {
-                         Clean up downloaded files
+                         //Clean up downloaded files
                         sh 'rm -f minikube-linux-amd64 kubectl'
                     }
                 }
