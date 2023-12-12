@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: myapp
-          image: medamine12/devopsproject
+          image: ihebkhalfallah/mongo-demo:1
           ports:
             - containerPort: 8080
         - name: mongo
