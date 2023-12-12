@@ -23,6 +23,19 @@ pipeline {
 
     stages {
 
+        
+        stage('Clean Up') {
+            steps {
+                script {
+                    // Clean up Docker images and containers
+                    sh 'docker system prune -a --volumes -f'
+
+                    // Clean up Jenkins workspace
+                    cleanWs()
+                }
+            }
+        }
+
         stage('Download and Install OpenJDK') {
             steps {
                 script {
@@ -30,7 +43,7 @@ pipeline {
                     sh "mkdir -p ${WORKSPACE}/jdk-17"
         
                     // Download and install OpenJDK 17
-                    //sh 'wget https://download.java.net/java/GA/jdk17/0d483333a00540d886896bac774ff48b/35/GPL/openjdk-17_linux-x64_bin.tar.gz'
+                    sh 'wget https://download.java.net/java/GA/jdk17/0d483333a00540d886896bac774ff48b/35/GPL/openjdk-17_linux-x64_bin.tar.gz'
                     sh "tar -xvf openjdk-17_linux-x64_bin.tar.gz -C ${WORKSPACE}"
                     sh "chmod -R 755 ${WORKSPACE}/jdk-17"
         
@@ -46,17 +59,17 @@ pipeline {
             steps {
                 script {
                     // Create a temporary sudoers file
-                    //def sudoersFile = '/tmp/jenkins_sudoers'
-                    //sh 'echo "jenkins ALL=(ALL) NOPASSWD: /usr/bin/zypper, /usr/bin/systemctl" > ' + sudoersFile
+                    def sudoersFile = '/tmp/jenkins_sudoers'
+                    sh 'echo "jenkins ALL=(ALL) NOPASSWD: /usr/bin/zypper, /usr/bin/systemctl" > ' + sudoersFile
         
                     // Copy the temporary sudoers file to /etc/sudoers.d/
-                    //sh 'echo Iheb123 | sudo -S cp ' + sudoersFile + ' /etc/sudoers.d/jenkins'
+                    sh 'echo Iheb123 | sudo -S cp ' + sudoersFile + ' /etc/sudoers.d/jenkins'
         
                     // Remove the temporary sudoers file
-                    //sh 'rm ' + sudoersFile
+                    sh 'rm ' + sudoersFile
         
                     // Update and install Nginx (non-interactive)
-                    //sh 'echo Iheb123 | sudo -S zypper --non-interactive --no-gpg-checks install -y nginx'
+                    sh 'echo Iheb123 | sudo -S zypper --non-interactive --no-gpg-checks install -y nginx'
         
                     // Start Nginx
                     sh 'echo Iheb123 | sudo -S systemctl start nginx'
@@ -73,26 +86,26 @@ pipeline {
                 script {
                     //try {
                         // Download Minikube binary
-                        //sh 'curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64'
+                        sh 'curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64'
                         // Make it executable
-                        //sh 'chmod +x minikube-linux-amd64'
+                        sh 'chmod +x minikube-linux-amd64'
                         // Move it to /usr/local/bin/
-                        //sh 'echo Iheb123 | sudo -S mv minikube-linux-amd64 /usr/local/bin/minikube'
+                        sh 'echo Iheb123 | sudo -S mv minikube-linux-amd64 /usr/local/bin/minikube'
         
-                    // Start Minikube with --home option
-                    sh 'minikube start'
+                        // Start Minikube with --home option
+                        sh 'minikube start'
         
                         // Install kubectl
-                        //sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
-                       // sh 'chmod +x kubectl'
-                     //   sh 'echo Iheb123 | sudo -S mv kubectl /usr/local/bin/kubectl'
-                   // } catch (Exception e) {
-                  //      currentBuild.result = 'FAILURE'
-                 //       error("Failed to install Minikube and kubectl: ${e.message}")
-                    //} finally {
-                        // Clean up downloaded files
-                   //       sh 'rm -f minikube-linux-amd64 kubectl'
-                  //  }
+                        sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
+                        sh 'chmod +x kubectl'
+                        sh 'echo Iheb123 | sudo -S mv kubectl /usr/local/bin/kubectl'
+                    } catch (Exception e) {
+                        currentBuild.result = 'FAILURE'
+                        error("Failed to install Minikube and kubectl: ${e.message}")
+                    } finally {
+                            //Clean up downloaded files
+                        sh 'rm -f minikube-linux-amd64 kubectl'
+                    }
                 }
             }
         }
@@ -256,17 +269,6 @@ spec:
         }
 
 
-        //stage('Clean Up') {
-            //steps {
-                //script {
-                    // Clean up Docker images and containers
-                    //sh 'docker system prune -a --volumes -f'
-
-                    // Clean up Jenkins workspace
-                    //cleanWs()
-                //}
-            //}
-        //}
 
     }
 
