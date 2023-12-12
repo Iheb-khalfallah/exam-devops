@@ -2,10 +2,10 @@ pipeline {
     agent any
 
     environment {
-        JAVA_HOME = '/var/lib/jenkins/jdk-17'
-        PATH = "$JAVA_HOME/bin:$PATH"
+        JAVA_HOME = '${WORKSPACE}/jdk-17'
+        JAVA_PATH = "$JAVA_HOME/bin:$PATH"
         
-        MINIKUBE_HOME = "/var/lib/jenkins/.minikube"
+        MINIKUBE_HOME = "${WORKSPACE}/.minikube"
         MINIKUBE_PATH = "/usr/local/bin:$MINIKUBE_HOME:$PATH"
         
         SONARQUBE_HOME = tool 'SonarQubeScanner'
@@ -26,14 +26,17 @@ pipeline {
         stage('Download and Install OpenJDK') {
             steps {
                 script {
-                    sh 'rm -f openjdk-17_linux-x64_bin.tar.gz openjdk-17_linux-x64_bin.tar.gz.1 openjdk-17_linux-x64_bin.tar.gz.2'
+                    // Create the target directory in the workspace
+                    sh "mkdir -p ${WORKSPACE}/jdk-17"
+        
                     // Download and install OpenJDK 17
-                    sh 'wget https://download.java.net/java/GA/jdk17/0d483333a00540d886896bac774ff48b/35/GPL/openjdk-17_linux-x64_bin.tar.gz'
-                    sh 'tar -xvf openjdk-17_linux-x64_bin.tar.gz -C /var/lib/jenkins/'
-                    sh 'chmod -R 755 /var/lib/jenkins/jdk-17'
+                    //sh 'wget https://download.java.net/java/GA/jdk17/0d483333a00540d886896bac774ff48b/35/GPL/openjdk-17_linux-x64_bin.tar.gz'
+                    sh 'tar -xvf openjdk-17_linux-x64_bin.tar.gz -C ${WORKSPACE}'
+                    sh "chmod -R 755 ${WORKSPACE}/jdk-17"
                 }
             }
         }
+
 
         stage('Install Nginx') {
             steps {
@@ -96,7 +99,7 @@ pipeline {
         stage('Build Maven') {
             steps {
                 script {
-                    env.JAVA_HOME = '/var/lib/jenkins/jdk-17'
+                    env.JAVA_HOME = '${WORKSPACE}/jdk-17'
                     env.PATH = "$JAVA_HOME/bin:$PATH"
                 }
                 checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Iheb-khalfallah/exam-devops.git']]) 
