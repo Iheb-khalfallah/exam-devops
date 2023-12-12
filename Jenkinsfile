@@ -70,6 +70,9 @@ pipeline {
                     def tempDir = "${env.WORKSPACE}/temp" // Define a temporary directory
                     
                     try {
+                        // Set MINIKUBE_HOME environment variable
+                        env.MINIKUBE_HOME = minikubeHome
+                        
                         // Download Minikube binary
                         sh 'curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64'
                         // Make it executable
@@ -77,8 +80,8 @@ pipeline {
                         // Move it to /usr/local/bin/ 
                         sh 'echo Iheb123 | sudo -S mv minikube-linux-amd64 /usr/local/bin/minikube'
         
-                        // Start Minikube with a custom home directory
-                        sh "minikube start --home=${minikubeHome}"
+                        // Start Minikube
+                        sh 'minikube start'
                         sh 'minikube status'
                         
                         // Install kubectl
@@ -98,6 +101,7 @@ pipeline {
                 }
             }
         }
+
 
  
         stage('Build Maven') {
