@@ -1,17 +1,6 @@
 version: '3'
 
 services:
-  myapp:
-    image: ihebkhalfallah/mongo-demo
-    ports:
-      - "9091:9090"
-    depends_on:
-      - mongo
-    environment:
-      SPRING_DATA_MONGODB_URI: "mongodb://mongo:27017/gte3"
-    networks:
-      - backend
-
   mongo:
     image: mongo
     ports:
@@ -20,6 +9,16 @@ services:
       - backend
     volumes:
       - mongodb-data:/data/db
+  myapp:
+    image: registry.hub.docker.com/ihebkhalfallah/mongo-demo:1
+    ports:
+      - "9091:9090"
+    depends_on:
+      - mongo
+    environment:
+      SPRING_DATA_MONGODB_URI: "mongodb://mongo:27017/gte3"
+    networks:
+      - backend
 
 volumes:
   mongodb-data:
