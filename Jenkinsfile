@@ -39,8 +39,6 @@ pipeline {
         stage('Download and Install OpenJDK') {
             steps {
                 script {
-                    // delete old installation
-                    sh 'rm -r jdk-17'
                     // Create the target directory in the workspace
                     sh "mkdir -p ${WORKSPACE}/jdk-17"
                     
