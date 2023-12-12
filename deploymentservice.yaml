@@ -16,7 +16,7 @@ spec:
         - name: myapp
           image: ihebkhalfallah/mongo-demo:1
           ports:
-            - containerPort: 8080
+            - containerPort: 8090
         - name: mongo
           image: mongo:4.2.2
           ports:
