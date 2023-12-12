@@ -1,35 +1,37 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: spring-boot-app-deployment
+  name: myapp-deployment
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: spring-boot-k8s
-  replicas: 2
+      app: myapp
   template:
     metadata:
       labels:
-        app: spring-boot-k8s
+        app: myapp
     spec:
       containers:
-        - name: spring-boot-k8s
-          image: ihebkhalfallah/mongo-demo:1 
-          imagePullPolicy: Always
+        - name: myapp
+          image: medamine12/devopsproject
           ports:
             - containerPort: 8080
-
+        - name: mongo
+          image: mongo:4.2.2
+          ports:
+            - containerPort: 27017
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
-  name: springboot-k8ssvc
+  name: myapp-service
 spec:
   selector:
-    app: spring-boot-k8s
+    app: myapp
   ports:
-    - protocol: "TCP"
+    - protocol: TCP
       port: 8080
       targetPort: 8080
-  type: NodePort
+  type: NodePort  # Use NodePort to expose externally
+---
