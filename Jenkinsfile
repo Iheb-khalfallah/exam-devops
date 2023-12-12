@@ -88,7 +88,9 @@ pipeline {
                         error("Failed to install Minikube and kubectl: ${e.message}")
                     } finally {
                          //Clean up downloaded files
-                        sh 'rm -f minikube-linux-amd64 kubectl'
+                        dir(tempDir) {
+                            sh 'rm -f minikube-linux-amd64 kubectl'
+                        }
                     }
                 }
             }
