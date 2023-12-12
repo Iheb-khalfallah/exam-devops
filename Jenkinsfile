@@ -103,8 +103,6 @@ pipeline {
         stage('Build Maven') {
             steps {
                 script {
-                    env.JAVA_HOME = "${WORKSPACE}/jdk-17"
-                    env.JAVA_PATH = "${env.JAVA_HOME}/bin:${env.JAVA_PATH}"
                     checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Iheb-khalfallah/exam-devops.git']]) 
                     sh 'mvn clean install -U'
                 }
