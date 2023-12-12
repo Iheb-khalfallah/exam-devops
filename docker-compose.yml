@@ -11,7 +11,6 @@ services:
       SPRING_DATA_MONGODB_URI: "mongodb://mongo:27017/gte3"
     networks:
       - backend
-    network_mode: bridge
 
   mongo:
     image: mongo
@@ -19,7 +18,6 @@ services:
       - "27017:27017"
     networks:
       - backend
-    network_mode: bridge
     volumes:
       - mongodb-data:/data/db
 
