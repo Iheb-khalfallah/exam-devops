@@ -182,7 +182,6 @@ pipeline {
             steps {
                 script {
                     // Deploy the Docker Compose environment
-                    sh 'docker-compose down'
                     sh 'docker-compose up -d'
                 }
             }
