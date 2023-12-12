@@ -8,7 +8,6 @@ pipeline {
         MINIKUBE_HOME = "${WORKSPACE}/.minikube"
         MINIKUBE_PATH = "/usr/local/bin:$MINIKUBE_HOME:$PATH"
         
-        SONARQUBE_HOME = tool 'SonarQubeScanner'
         SONAR_TOKEN = credentials('SONARQUBE_TOKEN')
         
     }
