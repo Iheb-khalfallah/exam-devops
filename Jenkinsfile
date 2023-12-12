@@ -66,6 +66,9 @@ pipeline {
         stage('Install/Start Minikube and Install Kubectl') {
             steps {
                 script {
+                    def minikubeHome = "${env.WORKSPACE}/minikube" // Specify a custom Minikube home directory
+                    def tempDir = "${env.WORKSPACE}/temp" // Define a temporary directory
+                    
                     try {
                         // Download Minikube binary
                         sh 'curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64'
@@ -73,11 +76,11 @@ pipeline {
                         sh 'chmod +x minikube-linux-amd64'
                         // Move it to /usr/local/bin/ 
                         sh 'echo Iheb123 | sudo -S mv minikube-linux-amd64 /usr/local/bin/minikube'
-  
-                        // Start Minikube
-                        sh 'minikube start'
+        
+                        // Start Minikube with a custom home directory
+                        sh "minikube start --home=${minikubeHome}"
                         sh 'minikube status'
-                    
+                        
                         // Install kubectl
                         sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
                         sh 'chmod +x kubectl'
@@ -87,12 +90,15 @@ pipeline {
                         currentBuild.result = 'FAILURE'
                         error("Failed to install Minikube and kubectl: ${e.message}")
                     } finally {
-                         //Clean up downloaded files
-                         sh 'rm -f minikube-linux-amd64 kubectl'
+                        // Clean up downloaded files
+                        dir(tempDir) {
+                            sh 'rm -f minikube-linux-amd64 kubectl'
+                        }
                     }
                 }
             }
         }
+
  
         stage('Build Maven') {
             steps {
