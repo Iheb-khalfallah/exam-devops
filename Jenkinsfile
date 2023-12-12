@@ -22,71 +22,71 @@ pipeline {
 
     stages {
 
-        //stage('Download and Install OpenJDK') {
-            //steps {
-                //script {
+        stage('Download and Install OpenJDK') {
+            steps {
+                script {
                     // Download and install OpenJDK 17
-                    //sh 'wget https://download.java.net/java/GA/jdk17/0d483333a00540d886896bac774ff48b/35/GPL/openjdk-17_linux-x64_bin.tar.gz'
-                    //sh 'tar -xvf openjdk-17_linux-x64_bin.tar.gz -C /var/lib/jenkins/'
-                    //sh 'chmod -R 755 /var/lib/jenkins/jdk-17'
-                //}
-            //}
-        //}
+                    sh 'wget https://download.java.net/java/GA/jdk17/0d483333a00540d886896bac774ff48b/35/GPL/openjdk-17_linux-x64_bin.tar.gz'
+                    sh 'tar -xvf openjdk-17_linux-x64_bin.tar.gz -C /var/lib/jenkins/'
+                    sh 'chmod -R 755 /var/lib/jenkins/jdk-17'
+                }
+            }
+        }
 
-        //stage('Install Nginx') {
-            //steps {
-                //script {
+        stage('Install Nginx') {
+            steps {
+                script {
                     // Create a temporary sudoers file
-                    //def sudoersFile = '/tmp/jenkins_sudoers'
-                    //sh 'echo "jenkins ALL=(ALL) NOPASSWD: /usr/bin/zypper, /usr/bin/systemctl" > ' + sudoersFile
+                    def sudoersFile = '/tmp/jenkins_sudoers'
+                    sh 'echo "jenkins ALL=(ALL) NOPASSWD: /usr/bin/zypper, /usr/bin/systemctl" > ' + sudoersFile
         
                     // Copy the temporary sudoers file to /etc/sudoers.d/
-                    //sh 'echo Iheb123 | sudo -S cp ' + sudoersFile + ' /etc/sudoers.d/jenkins'
+                    sh 'echo Iheb123 | sudo -S cp ' + sudoersFile + ' /etc/sudoers.d/jenkins'
         
                     // Remove the temporary sudoers file
-                    //sh 'rm ' + sudoersFile
+                    sh 'rm ' + sudoersFile
         
                     // Update and install Nginx (non-interactive)
-                    //sh 'echo Iheb123 | sudo -S zypper --non-interactive --no-gpg-checks install -y nginx'
+                    sh 'echo Iheb123 | sudo -S zypper --non-interactive --no-gpg-checks install -y nginx'
         
                     // Start Nginx
-                   //sh 'echo Iheb123 | sudo -S systemctl start nginx'
+                   sh 'echo Iheb123 | sudo -S systemctl start nginx'
         
                     // Enable Nginx to start on boot
-                    //sh 'echo Iheb123 | sudo -S systemctl enable nginx'
-                //}
-            //}
-        //}
+                    sh 'echo Iheb123 | sudo -S systemctl enable nginx'
+                }
+            }
+        }
 
         
         stage('Install/Start Minikube and Install Kubectl') {
             steps {
                 script {
-                    //try {
+                    try {
                         // Download Minikube binary
-                        //sh 'curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64'
+                        sh 'curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64'
                         // Make it executable
-                        //sh 'chmod +x minikube-linux-amd64'
+                        sh 'chmod +x minikube-linux-amd64'
                         // Move it to /usr/local/bin/ 
-                        //sh 'echo Iheb123 | sudo -S mv minikube-linux-amd64 /usr/local/bin/minikube'
+                        sh 'echo Iheb123 | sudo -S mv minikube-linux-amd64 /usr/local/bin/minikube'
   
-                    // Start Minikube
-                    export NO_PROXY=localhost,127.0.0.1,10.96.0.0/12,192.168.59.0/24,192.168.49.0/24,192.168.39.0/24
-                    sh 'minikube start'
-                    sh 'minikube status'
+                        // Start Minikube
+                        export NO_PROXY=localhost,127.0.0.1,10.96.0.0/12,192.168.59.0/24,192.168.49.0/24,192.168.39.0/24
+                        sh 'minikube start'
+                        sh 'minikube status'
                     
                         // Install kubectl
-                        //sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
-                        //sh 'chmod +x kubectl'
-                        //sh 'echo Iheb123 | sudo -S mv kubectl /usr/local/bin/kubectl'
+                        sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
+                        sh 'chmod +x kubectl'
+                        sh 'echo Iheb123 | sudo -S mv kubectl /usr/local/bin/kubectl'
                         
-                    //} catch (Exception e) {
-                        //currentBuild.result = 'FAILURE'
-                        //error("Failed to install Minikube and kubectl: ${e.message}")
-                    //} finally {
-                        // Clean up downloaded files
-                        //sh 'rm -f minikube-linux-amd64 kubectl'
-                    //}
+                    } catch (Exception e) {
+                        currentBuild.result = 'FAILURE'
+                        error("Failed to install Minikube and kubectl: ${e.message}")
+                    } finally {
+                         Clean up downloaded files
+                        sh 'rm -f minikube-linux-amd64 kubectl'
+                    }
                 }
             }
         }
@@ -117,25 +117,25 @@ pipeline {
             }
         }
 
-        //stage('Build Image') {
-            //steps {
-                //script {
+        stage('Build Image') {
+            steps {
+                script {
                     // Build the Docker image
-                    //docker.build("ihebkhalfallah/mongo-demo:1")
-                //}
-            //}
-        //}
+                    docker.build("ihebkhalfallah/mongo-demo:1")
+                }
+            }
+        }
 
-        //stage('Push') {
-            //steps {
-                //script {
+        stage('Push') {
+            steps {
+                script {
                     // Push the Docker image
-                    //docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
-                        //docker.image("ihebkhalfallah/mongo-demo:1").push()
-                    //}
-                //}
-            //}
-        //}
+                    docker.withRegistry('https://registry.hub.docker.com', 'TunisianDeveloper') {
+                        docker.image("ihebkhalfallah/mongo-demo:1").push()
+                    }
+                }
+            }
+        }
 
         //stage('Pull'){
             //steps{
