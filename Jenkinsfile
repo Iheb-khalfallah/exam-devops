@@ -63,34 +63,34 @@ pipeline {
         }
 
         
-        stage('Install/Start Minikube and Install Kubectl') {
-            steps {
-                script {
-                    try {
+        //stage('Install/Start Minikube and Install Kubectl') {
+            //steps {
+               // script {
+                 //   try {
                         // Download Minikube binary
-                        sh 'curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64'
+                      //  sh 'curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64'
                         // Make it executable
-                        sh 'chmod +x minikube-linux-amd64'
+                       // sh 'chmod +x minikube-linux-amd64'
                         // Move it to /usr/local/bin/
-                        sh 'echo Iheb123 | sudo -S mv minikube-linux-amd64 /usr/local/bin/minikube'
+                       // sh 'echo Iheb123 | sudo -S mv minikube-linux-amd64 /usr/local/bin/minikube'
         
                         // Start Minikube with --home option
-                        sh 'minikube start --home=/path/to/jenkins/home'
+                     //   sh 'minikube start --home=/path/to/jenkins/home'
         
                         // Install kubectl
-                        sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
-                        sh 'chmod +x kubectl'
-                        sh 'echo Iheb123 | sudo -S mv kubectl /usr/local/bin/kubectl'
-                    } catch (Exception e) {
-                        currentBuild.result = 'FAILURE'
-                        error("Failed to install Minikube and kubectl: ${e.message}")
-                    } finally {
+                     //   sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
+                     //   sh 'chmod +x kubectl'
+                     //   sh 'echo Iheb123 | sudo -S mv kubectl /usr/local/bin/kubectl'
+                   // } catch (Exception e) {
+                  //      currentBuild.result = 'FAILURE'
+                 //       error("Failed to install Minikube and kubectl: ${e.message}")
+                  //  } finally {
                         // Clean up downloaded files
-                          sh 'rm -f minikube-linux-amd64 kubectl'
-                    }
-                }
-            }
-        }
+                   //       sh 'rm -f minikube-linux-amd64 kubectl'
+                  //  }
+               // }
+           // }
+       // }
 
 
 
