@@ -21,11 +21,6 @@ services:
     volumes:
       - mongodb-data:/data/db
 
-  nginx:
-    image: nginx:latest
-    ports:
-      - "8081:80"
-
 volumes:
   mongodb-data:
 
