@@ -54,7 +54,7 @@ pipeline {
                     //sh 'echo Iheb123 | sudo -S zypper --non-interactive --no-gpg-checks install -y nginx'
         
                     // Start Nginx
-                   sh 'echo Iheb123 | sudo -S systemctl start nginx'
+                    sh 'echo Iheb123 | sudo -S systemctl start nginx'
         
                     // Enable Nginx to start on boot
                     sh 'echo Iheb123 | sudo -S systemctl enable nginx'
