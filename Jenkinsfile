@@ -117,7 +117,7 @@ pipeline {
             steps {
                 script {
                     env.JAVA_HOME = '/var/lib/jenkins/jdk-17'
-                    env.PATH = "$JAVA_HOME/bin:$PATH"
+                    env.JAVA_PATH = "$JAVA_HOME/bin:$PATH"
                 }
                     checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Iheb-khalfallah/exam-devops.git']]) 
                     sh 'mvn clean install -U'
