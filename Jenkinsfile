@@ -187,7 +187,7 @@ pipeline {
             steps {
                 script {
                    //kubernetesDeploy (configs: 'deploymentservice.yaml', kubeconfigId: 'kubeconf')
-                    sh 'kubectl apply -f deploymentservice.yaml' 
+                    sh 'kubectl create --save-config -f deploymentservice.yaml' 
                 }
             }
         }
