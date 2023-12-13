@@ -31,7 +31,7 @@ spec:
     app: myapp
   ports:
     - protocol: TCP
-      port: 9090
+      port: 31259
       targetPort: 9090
   type: NodePort  # Use NodePort to expose externally
 ---
