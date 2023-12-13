@@ -4,7 +4,7 @@ services:
   myapp:
     image: ihebkhalfallah/mongo-demo:1
     ports:
-      - "8090:8090"
+      - "9090:9090"
     depends_on:
       - mongo
     environment:
