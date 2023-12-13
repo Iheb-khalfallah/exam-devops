@@ -1,16 +1,8 @@
-version: '3'
+version: '3.3'
 
 services:
-  mongo:
-    image: mongo
-    ports:
-      - "27017:27017"
-    networks:
-      - backend
-    volumes:
-      - mongodb-data:/data/db
   myapp:
-    image: registry.hub.docker.com/ihebkhalfallah/mongo-demo:1
+    image: ihebkhalfallah/mongo-demo:1
     ports:
       - "8090:8090"
     depends_on:
@@ -18,10 +10,22 @@ services:
     environment:
       SPRING_DATA_MONGODB_URI: "mongodb://mongo:27017/gte3"
     networks:
-      - backend
+      - mynetwork
+    volumes:
+      - mongodb-data:/data/db
 
+  mongo:
+    image: mongo:4.2.2
+    hostname: mongo
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - mynetwork
+      
 volumes:
   mongodb-data:
-
+  
 networks:
-  backend:
+  mynetwork:
+    driver: bridge
