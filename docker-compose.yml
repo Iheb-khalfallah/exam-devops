@@ -4,7 +4,7 @@ services:
   myapp:
     image: ihebkhalfallah/mongo-demo:1
     ports:
-      - "31259:9090"
+      - "9090:9090"
     networks:
       - mynetwork
     depends_on:
