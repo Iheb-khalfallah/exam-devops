@@ -186,7 +186,8 @@ pipeline {
         stage('Build and Deploy to Kubernetes') {
             steps {
                 script {
-                   kubernetesDeploy (configs: 'deploymentservice.yaml', kubeconfigId: 'kubeconf')
+                   //kubernetesDeploy (configs: 'deploymentservice.yaml', kubeconfigId: 'kubeconf')
+                    sh 'kubectl apply -f deploymentservice.yaml' 
                 }
             }
         }
