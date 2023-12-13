@@ -5,27 +5,21 @@ services:
     image: ihebkhalfallah/mongo-demo:1
     ports:
       - "9090:9090"
+    networks:
+      - mynetwork
     depends_on:
       - mongo
     environment:
       SPRING_DATA_MONGODB_URI: "mongodb://mongo:27017/gte3"
-    networks:
-      - mynetwork
-    volumes:
-      - mongodb-data:/data/db
 
   mongo:
     image: mongo:4.2.2
     hostname: mongo
-    container_name: mongo
     ports:
       - "27017:27017"
     networks:
       - mynetwork
-      
-volumes:
-  mongodb-data:
-  
+
 networks:
   mynetwork:
-    driver: bridge
+
